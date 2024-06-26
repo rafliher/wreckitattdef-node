@@ -18,8 +18,8 @@ def generate_env(username, password):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-u', '--username', type=str, default='admin')
-    parser.add_argument('-p', '--password', type=str, default='admin')
+    parser.add_argument('-u', '--username', type=str, default='kekuatanayam')
+    parser.add_argument('-p', '--password', type=str, default='adalahkseimbangan')
     parser.add_argument('-c', '--challenges', type=str, default='', help='challenge names')
     args = parser.parse_args()
 
