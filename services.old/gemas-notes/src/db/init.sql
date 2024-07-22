@@ -33,7 +33,7 @@ CREATE TABLE `rewards` (
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO rewards(fl4gg) VALUES ('GEMASTIK{e54e6f6ba0c7cbb4eb7a2016e2f17842}');
+INSERT INTO rewards(fl4gg) VALUES ('WRECKIT50{e54e6f6ba0c7cbb4eb7a2016e2f17842}');
 
 GRANT SELECT,INSERT,UPDATE,DELETE ON `User` TO `gemasnotesuser`@`%`;
 GRANT SELECT,INSERT,UPDATE,DELETE ON `Notes` TO `gemasnotesuser`@`%`;

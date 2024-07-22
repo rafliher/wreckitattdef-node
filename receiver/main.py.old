@@ -4,6 +4,15 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from config import get_settings
 
 from challenges.Art import Art
+from challenges.XL import XL
+from challenges.GemasNotes import GemasNotes
+from challenges.Pasta import Pasta
+from challenges.Burvesigner import Burvesigner
+from challenges.S3 import S3
+from challenges.Crawlback import Crawlback
+from challenges.BackToBasic import BackToBasic
+from challenges.GemasFetcher import GemasFetcher
+from challenges.Hirnfick import Hirnfick
 
 import os
 
@@ -13,6 +22,15 @@ settings = get_settings()
 
 challenges = {
     "art": Art(10000),
+    "xl": XL(11000),
+    "gemas-notes": GemasNotes(12000),
+    "pasta": Pasta(13000),
+    "burvesigner": Burvesigner(14000),
+    "hirnfick": Hirnfick(15000),
+    "gemas-fetcher": GemasFetcher(16000),
+    "s3": S3(20000),
+    "crawlback": Crawlback(21000),
+    "back-to-basic": BackToBasic(22000),
 }
 
 
