@@ -1,9 +1,8 @@
 from .Challenge import Challenge
 
 import io
-import pandas as pd
 import requests
-import re
+import random
 
 class Poke(Challenge):
     flag_location = 'flags/poke.txt'
@@ -34,7 +33,7 @@ class Poke(Challenge):
 
         try:
             # Step 1: Randomize the Pokémon name
-            pokemon_name = self.random_pokemon()
+            pokemon_name =  random.choice(pokemon_names)
             url = f'http://localhost:{self.port}/'
             data = {'pokemon_name': pokemon_name}
             r = requests.post(url, data=data, timeout=5)

@@ -15,7 +15,6 @@ RUN chmod -R 777 /var/www/html/backups
 
 RUN echo "allow_url_include = On" >> /usr/local/etc/php/php.ini
 
-RUN touch /flag.txt
 COPY start.sh .
 
 RUN chmod +x start.sh

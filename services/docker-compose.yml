@@ -10,7 +10,7 @@ services:
       args:
         - PASSWORD=$PASSWORD_10000
     volumes:
-      - ../receiver/flags/poke.txt:/poke.txt:ro
+      - ../receiver/flags/poke.txt:/flag.txt:ro
       - ../utils/bashrc:/root/.bashrc:ro
       - ../utils/preexec.sh:/root/.preexec.sh:ro
     ports:
