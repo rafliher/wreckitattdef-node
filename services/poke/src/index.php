@@ -1,3 +1,14 @@
+<?php
+    if (isset($_GET['image'])) {
+        $image = $_GET['image'];
+        
+        header('Content-Type: image/png');
+        include($image);
+
+        die();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,7 +97,7 @@
         if (isset($pokemon_data['name'])) {
             $pokemon_name = ucfirst($pokemon_data['name']);
             $pokemon_image_url = $pokemon_data['sprites']['front_default'];
-            $pokemon_image_file = $pokemon_name . ".png";
+            $pokemon_image_file = strtolower($pokemon_name) . ".png";
 
             // Download the image and save it as a file
             file_put_contents($pokemon_image_file, file_get_contents($pokemon_image_url));
@@ -99,10 +110,6 @@
         } else {
             echo "<p>Pokémon not found. Please try again.</p>";
         }
-    }
-    if (isset($_GET['image'])) {
-        $image = $_GET['image'];
-        include($image);
     }
     ?>
 </body>

@@ -37,7 +37,7 @@ class Poke(Challenge):
             url = f'http://localhost:{self.port}/'
             data = {'pokemon_name': pokemon_name}
             r = requests.post(url, data=data, timeout=5)
-            assert pokemon_name in r.text, 'Pokémon data not available'
+            assert pokemon_name.lower() in r.text.lower(), 'Pokémon data not available'
 
             # Step 2: Check if the image is available
             image_url = f'http://localhost:{self.port}/?image={pokemon_name}.png'
