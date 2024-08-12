@@ -38,9 +38,9 @@ def main():
     os.chdir(os.path.join(cwd, 'receiver'))
     os.system('apt-get install -y gcc python3-dev libgmp3-dev libssl-dev libffi-dev build-essential python3-venv')
     os.system('python3 -m venv .')
-    os.system('./bin/activate')
-    os.system('./bin/python3 -m pip install -r requirements.txt')
-    os.system('./bin/python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 80')
+    os.system('sudo ./bin/activate')
+    os.system('sudo ./bin/python3 -m pip install -r requirements.txt')
+    os.system('sudo ./bin/python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 80')
 
 if __name__ == '__main__':
     main()
