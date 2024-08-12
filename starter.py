@@ -36,7 +36,7 @@ def main():
     os.system(f'docker-compose -f docker-compose.yml up --build -d {args.challenges}')
     
     os.chdir(os.path.join(cwd, 'receiver'))
-    os.system('apt-get install -y gcc python3-dev libgmp3-dev libssl-dev libffi-dev build-essential python3-pip')
+    os.system('apt-get install -y gcc python3-dev libgmp3-dev libssl-dev libffi-dev build-essential python3-pip python3-venv')
     os.system('python3 -m venv .')
     os.system('source ./bin/activate')
     os.system('python3 -m pip install -r requirements.txt')
