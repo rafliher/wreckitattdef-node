@@ -2,7 +2,6 @@ import argparse
 import os
 import uuid
 
-
 def generate_env(username, password):
     env = []
     compose_location = os.path.join(os.getcwd(), 'services/docker-compose.yml')
@@ -14,7 +13,6 @@ def generate_env(username, password):
     credentials = [f'PASSWORD_{(i * 1000) + 10000}={uuid.uuid4().hex}' for i in range(20)]
     env.extend(credentials)
     return '\n'.join(env)
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -40,19 +38,7 @@ def main():
     os.chdir(os.path.join(cwd, 'receiver'))
     os.system('apt-get install -y gcc python3-dev libgmp3-dev libssl-dev libffi-dev build-essential python3-pip')
     os.system('python3 -m pip install -r requirements.txt')
-    os.system('uvicorn main:app --reload --host 0.0.0.0 --port 80')
-
-
+    os.system('python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 80')
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
