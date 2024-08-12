@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from config import get_settings
 
-from challenges.Art import Art
+from challenges.Poke import Poke
 
 import os
 
@@ -12,7 +12,7 @@ security = HTTPBasic()
 settings = get_settings()
 
 challenges = {
-    "art": Art(10000),
+    "poke": Poke(10000),
 }
 
 

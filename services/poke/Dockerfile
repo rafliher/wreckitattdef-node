@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/ruby:2.7.2
+FROM public.ecr.aws/docker/library/php:8.0-apache
 
 ARG PASSWORD
 
@@ -8,17 +8,15 @@ RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
 RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 RUN service ssh start
 
-WORKDIR /ctf/art/
+COPY src/ /var/www/html
+RUN mkdir /var/www/html/backups
+RUN chown -R www-data:www-data /var/www/html/backups
+RUN chmod -R 777 /var/www/html/backups
 
-RUN useradd -m ctf
-RUN chown -R root:root /ctf/art/
+RUN echo "allow_url_include = On" >> /usr/local/etc/php/php.ini
 
-COPY Gemfile .
-COPY app.rb .
-COPY start.sh .
-
-RUN bundle install
 RUN touch /flag.txt
+COPY start.sh .
 
 RUN chmod +x start.sh
 CMD ./start.sh
