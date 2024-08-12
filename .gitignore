@@ -1,0 +1,10 @@
+lib
+lib64
+bin
+pyenv.cfg
+receiver/bin
+receiver/lib
+receiver/lib64
+receiver/pyenv.cfg
+receiver/include
+receiver/pwntools-doc
