@@ -40,7 +40,7 @@ class Poke(Challenge):
             assert pokemon_name.lower() in r.text.lower(), 'Pokémon data not available'
 
             # Step 2: Check if the image is available
-            image_url = f'http://localhost:{self.port}/?image={pokemon_name}.png'
+            image_url = f'http://localhost:{self.port}/?image={pokemon_name.lower()}.png'
             r = requests.get(image_url, timeout=5)
             assert r.status_code == 200 and 'image/png' in r.headers['Content-Type'], 'Pokémon image not available or incorrect content type'
 
