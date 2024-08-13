@@ -1,104 +1,105 @@
-from flask import Flask, request, render_template, send_file, redirect, url_for
-import ecdsa
-import PyPDF2
-import io
-from dotenv import load_dotenv
+from flask import Flask, request, render_template, redirect, url_for, session
+import base64
 import os
+from dotenv import load_dotenv
+from module import sign_pdf, verify_signature, handleLogin
 
-# Load environment variables
 load_dotenv()
-SECRET_KEY = os.getenv('ECDSA_SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY
 
-def sign_pdf(file):
-    # Load secret key
-    private_key = ecdsa.SigningKey.from_string(bytes.fromhex(SECRET_KEY), curve=ecdsa.SECP256k1)
+def generate_token(username, isAdmin):
+    token_string = f"{username}:{SECRET_KEY}:{isAdmin}"
+    token = base64.b64encode(token_string.encode()).decode()
+    return token
 
-    # Read PDF
-    pdf_reader = PyPDF2.PdfReader(file)
-    pdf_writer = PyPDF2.PdfWriter()
-
-    for page in pdf_reader.pages:
-        pdf_writer.add_page(page)
-
-    # Get PDF content
-    pdf_data = io.BytesIO()
-    pdf_writer.write(pdf_data)
-    pdf_data.seek(0)
-    pdf_content = pdf_data.read()
-
-    # Create a signature
-    signature = private_key.sign(pdf_content)
-
-    # Add signature to metadata
-    pdf_writer.add_metadata({'/Signature': signature.hex()})
-    signed_pdf = io.BytesIO()
-    pdf_writer.write(signed_pdf)
-    signed_pdf.seek(0)
-
-    return signed_pdf
-
-def verify_signature(file):
-    # Load secret key
-    public_key = ecdsa.VerifyingKey.from_string(bytes.fromhex(SECRET_KEY), curve=ecdsa.SECP256k1)
-
-    # Read PDF
-    pdf_reader = PyPDF2.PdfReader(file)
-    signature_text = pdf_reader.metadata.get('/Signature', '')
-    signature = bytes.fromhex(signature_text)
-
-    # Get PDF content
-    pdf_data = io.BytesIO()
-    pdf_writer = PyPDF2.PdfWriter()
-
-    for page in pdf_reader.pages:
-        pdf_writer.add_page(page)
-
-    pdf_writer.write(pdf_data)
-    pdf_data.seek(0)
-    pdf_content = pdf_data.read()
-
-    # Verify signature
+def verify_token(token):
     try:
-        public_key.verify(signature, pdf_content)
-        return True
-    except ecdsa.BadSignatureError:
-        return False
+        decoded_token = base64.b64decode(token).decode()
+        username, key, isAdmin = decoded_token.split(':')
+        if(key==SECRET_KEY): return {'status': True, 'data': {'username':username, 'isAdmin':isAdmin=='True'}}
+        else: return {'status': False}
+        
+    except (ValueError, TypeError):
+        return None
+
+@app.route('/admin_panel')
+def admin_panel():
+    if 'token' in session:
+        verifies = verify_token(session['token'])
+        if(verifies['status']):
+            decoded_token_data = verifies['data'] 
+            if decoded_token_data['isAdmin']:
+                return render_template('admin_panel.html', isAdmin=decoded_token_data['isAdmin'])
+    return redirect(url_for('index'))
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if 'token' in session:
+        verifies = verify_token(session['token'])
+        if(verifies['status']):
+            decoded_token_data = verifies['data']
+            return render_template('index.html', isAdmin=decoded_token_data['isAdmin'])
+    return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        wasLogin = handleLogin(username, password)
+        if wasLogin['status']:
+            token = generate_token(username, wasLogin['isAdmin'])
+            session['token'] = token
+            return redirect(url_for('index'))
+        return redirect(url_for('login', error='Invalid username or password'))
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('token', None)
+    return redirect(url_for('index'))
 
 @app.route('/sign', methods=['GET', 'POST'])
 def sign():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(url_for('sign'))
-        
-        file = request.files['file']
-        if file.filename == '' or not file.filename.lower().endswith('.pdf'):
-            return "Only PDF files are allowed."
+    if 'token' in session:
+        verifies = verify_token(session['token'])
+        if(verifies['status']):
+            decoded_token_data = verifies['data']
+            if request.method == 'POST':
+                if 'file' not in request.files:
+                    return redirect(url_for('sign'))
+                
+                file = request.files['file']
+                if file.filename == '' or not file.filename.lower().endswith('.pdf'):
+                    return "Only PDF files are allowed."
 
-        signed_pdf = sign_pdf(file)
-        return send_file(signed_pdf, attachment_filename='signed_file.pdf', as_attachment=True)
-    
-    return render_template('sign.html')
+                signed_pdf = sign_pdf(file, SECRET_KEY)
+                return send_file(signed_pdf, attachment_filename='signed_file.pdf', as_attachment=True)
+            return render_template('sign.html', isAdmin=decoded_token_data['isAdmin'])
+    return redirect(url_for('login'))
 
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(url_for('verify'))
+    if 'token' in session:
+        verifies = verify_token(session['token'])
+        if(verifies['status']):
+            decoded_token_data = verifies['data']
+            if request.method == 'POST':
+                if 'file' not in request.files:
+                    return redirect(url_for('verify'))
 
-        file = request.files['file']
-        if file.filename == '' or not file.filename.lower().endswith('.pdf'):
-            return "Only PDF files are allowed."
+                file = request.files['file']
+                if file.filename == '' or not file.filename.lower().endswith('.pdf'):
+                    return "Only PDF files are allowed."
 
-        is_valid = verify_signature(file)
-        return render_template('verify_result.html', is_valid=is_valid)
-    
-    return render_template('verify.html')
+                is_valid = verify_signature(file, SECRET_KEY)
+                return render_template('verify_result.html', is_valid=is_valid, isAdmin=decoded_token_data['isAdmin'])
+            
+            return render_template('verify.html', isAdmin=decoded_token_data['isAdmin'])
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
