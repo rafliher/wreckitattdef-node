@@ -1,0 +1,52 @@
+from .Challenge import Challenge
+
+import io
+import requests
+import random
+
+class Poke(Challenge):
+    flag_location = 'flags/niko.txt'
+    history_location = 'history/niko.txt'
+
+    def distribute(self, flag):
+        try:
+            with open(self.flag_location, 'w') as f:
+                f.write(flag)
+            
+            with open(self.history_location, 'a') as f:
+                f.write(flag + '\n')
+
+            self.logger.info(f'Flag {flag} written to {self.flag_location}')
+            return True
+
+        except Exception as e:
+            self.logger.error(f'Could not write flag to {self.flag_location}: {e}')
+            return False
+
+    def check(self):
+        pokemon_names = [
+            "pikachu", "bulbasaur", "charmander", "squirtle", "jigglypuff",
+            "meowth", "psyduck", "machop", "gastly", "krabby",
+            "mew", "charizard", "pidgey", "rattata", "vulpix",
+            "eevee", "snorlax", "magikarp", "growlithe", "abra"
+        ]
+
+        try:
+            # Step 1: Randomize the Pokémon name
+            pokemon_name =  random.choice(pokemon_names)
+            url = f'http://localhost:{self.port}/'
+            data = {'pokemon_name': pokemon_name}
+            r = requests.post(url, data=data, timeout=5)
+            assert pokemon_name.lower() in r.text.lower(), 'Pokémon data not available'
+
+            # Step 2: Check if the image is available
+            image_url = f'http://localhost:{self.port}/?image={pokemon_name.lower()}.png'
+            r = requests.get(image_url, timeout=5)
+            assert r.status_code == 200 and 'image/png' in r.headers['Content-Type'], 'Pokémon image not available or incorrect content type'
+
+            self.logger.info('Check passed for poke')
+            return True
+
+        except Exception as e:
+            self.logger.error(f'Could not check poke: {e}')
+            return False
