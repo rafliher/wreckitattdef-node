@@ -21,6 +21,7 @@ RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
     echo "AllowUsers ctfuser" >> /etc/ssh/sshd_config
 
 # Start SSH service
+RUN mkdir -p /run/sshd && chmod 755 /run/sshd
 RUN ssh-keygen -A
 RUN service ssh start
 
@@ -32,8 +33,6 @@ RUN python3 -c "import random; import string; flag = ''.join(random.choices(stri
 
 RUN pip install -r requirements.txt
 RUN chmod +x ./start.sh
-
-USER ctfuser
 
 CMD ./start.sh
 
