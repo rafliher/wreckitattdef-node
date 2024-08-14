@@ -32,9 +32,12 @@ RUN python3 -c "import random; import string; flag = ''.join(random.choices(stri
 RUN pip install -r requirements.txt
 RUN chmod +x ./start.sh
 
-EXPOSE 8000
-EXPOSE 22
+ENV USER=root
+CMD ["ssh-keygen", "-A"]
 
 USER ctfuser
 
 CMD ./start.sh
+
+EXPOSE 8000
+EXPOSE 22

@@ -9,7 +9,8 @@ RUN useradd -m -d /var/www/html ctfuser && echo ctfuser:${PASSWORD} | chpasswd
 RUN apt-get update && apt-get install -y openssh-server curl
 
 # Configure SSH for ctfuser
-RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
+RUN mkdir /var/run/sshd && \
+    echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
     echo "PermitRootLogin no" >> /etc/ssh/sshd_config && \
     echo "AllowUsers ctfuser" >> /etc/ssh/sshd_config
 
@@ -29,8 +30,14 @@ RUN echo "allow_url_include = On" >> /usr/local/etc/php/php.ini
 COPY start.sh .
 RUN chmod +x start.sh
 
+ENV USER=root
+CMD ["ssh-keygen", "-A"]
+
 # Set ctfuser as the default user
 USER ctfuser
+
+EXPOSE 80
+EXPOSE 22
 
 # Start the application
 CMD ./start.sh
