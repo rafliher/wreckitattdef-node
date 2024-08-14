@@ -4,6 +4,7 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from config import get_settings
 
 from challenges.Poke import Poke
+from challenges.Niko import Niko
 
 import os
 
@@ -13,6 +14,7 @@ settings = get_settings()
 
 challenges = {
     "poke": Poke(10000),
+    "niko": Niko(15000),
 }
 
 
@@ -32,15 +34,13 @@ def read_root():
 @app.get("/restart/{challenge}")
 def restart(challenge: str, credentials: HTTPBasicCredentials = Depends(security)):
     validate(credentials, challenge)
-    os.system(f"docker-compose -f {settings.COMPOSE_LOCATION} down {challenge}")
-    os.system(f"docker-compose -f {settings.COMPOSE_LOCATION} up -d {challenge}")
+    os.system(f"docker-compose -f {settings.COMPOSE_LOCATION} restart {challenge}")
     return {"message": "Challenge restarted"}
 
 
 @app.get("/rollback/{challenge}")
 def rollback(challenge: str, credentials: HTTPBasicCredentials = Depends(security)):
     validate(credentials, challenge)
-    os.system(f"docker-compose -f {settings.COMPOSE_LOCATION} down {challenge}")
     os.system(f"docker-compose -f {settings.COMPOSE_LOCATION} up -d --force-recreate {challenge}")
     return {"message": "Challenge restarted"}
 
