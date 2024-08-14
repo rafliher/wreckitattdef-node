@@ -21,6 +21,7 @@ RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
     echo "AllowUsers ctfuser" >> /etc/ssh/sshd_config
 
 # Start SSH service
+RUN ssh-keygen -A
 RUN service ssh start
 
 COPY src/ .
@@ -31,9 +32,6 @@ RUN python3 -c "import random; import string; flag = ''.join(random.choices(stri
 
 RUN pip install -r requirements.txt
 RUN chmod +x ./start.sh
-
-ENV USER=root
-CMD ["ssh-keygen", "-A"]
 
 USER ctfuser
 

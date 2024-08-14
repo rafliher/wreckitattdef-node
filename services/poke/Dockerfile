@@ -15,6 +15,7 @@ RUN mkdir /var/run/sshd && \
     echo "AllowUsers ctfuser" >> /etc/ssh/sshd_config
 
 # Start SSH service
+RUN ssh-keygen -A
 RUN service ssh start
 
 # Copy source code and set permissions
@@ -29,9 +30,6 @@ RUN echo "allow_url_include = On" >> /usr/local/etc/php/php.ini
 # Copy start script and set execute permissions
 COPY start.sh .
 RUN chmod +x start.sh
-
-ENV USER=root
-CMD ["ssh-keygen", "-A"]
 
 # Set ctfuser as the default user
 USER ctfuser
