@@ -4,6 +4,7 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from config import get_settings
 
 from challenges.Poke import Poke
+from challenges.Niko import Niko
 
 import os
 
@@ -13,6 +14,7 @@ settings = get_settings()
 
 challenges = {
     "poke": Poke(10000),
+    "niko": Niko(15000),
 }
 
 
