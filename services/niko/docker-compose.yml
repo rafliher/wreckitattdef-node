@@ -7,7 +7,7 @@ services:
     build:
       context: ./
       args:
-        - PASSWORD=inlEPuZMEMZrn0tvpPiC
+        - PASSWORD=PASSWORD_15000
     ports:
       - "15000:8000"
       - "15022:22"
