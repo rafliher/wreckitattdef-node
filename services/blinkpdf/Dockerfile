@@ -1,21 +1,18 @@
-FROM public.ecr.aws/docker/library/php:8.0-apache
+FROM python:3.10-slim-buster
 
-ARG PASSWORD
+RUN apt-get update && apt-get install -y nano
 
-RUN echo root:${PASSWORD} | chpasswd
-RUN apt-get update && apt-get install -y openssh-server curl
-RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
-RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
-RUN service ssh start
+WORKDIR /opt
+COPY ./src .
+COPY .env /opt/.env
 
-COPY src/ /var/www/html
-RUN mkdir /var/www/html/backups
-RUN chown -R www-data:www-data /var/www/html/backups
-RUN chmod -R 777 /var/www/html/backups
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN echo "allow_url_include = On" >> /usr/local/etc/php/php.ini
+ARG FLAG
+RUN echo $FLAG > flag && chmod 444 flag
 
-COPY start.sh .
+COPY ./main.sh /main.sh
 
-RUN chmod +x start.sh
-CMD ./start.sh
+RUN chmod +x /main.sh
+
+CMD ["/main.sh"]

@@ -1,12 +1,14 @@
-import ecdsa
+from module.decdsa import DECDSA
 import PyPDF2
 import io
 import os
+from dotenv import load_dotenv
+load_dotenv()
+PRIVATE_KEY = os.getenv('PRIVATE_KEY')
 
-def sign_pdf(file, SECRET_KEY):
-    # Load secret key
-    private_key = ecdsa.SigningKey.from_string(bytes.fromhex(SECRET_KEY), curve=ecdsa.SECP256k1)
+decdsa = DECDSA(privateKey=PRIVATE_KEY)
 
+def sign_pdf(file):
     # Read PDF
     pdf_reader = PyPDF2.PdfReader(file)
     pdf_writer = PyPDF2.PdfWriter()
@@ -21,7 +23,7 @@ def sign_pdf(file, SECRET_KEY):
     pdf_content = pdf_data.read()
 
     # Create a signature
-    signature = private_key.sign(pdf_content)
+    signature = decdsa.sign(pdf_content)
 
     # Add signature to metadata
     pdf_writer.add_metadata({'/Signature': signature.hex()})
@@ -31,10 +33,7 @@ def sign_pdf(file, SECRET_KEY):
 
     return signed_pdf
 
-def verify_signature(file, SECRET_KEY):
-    # Load secret key
-    public_key = ecdsa.VerifyingKey.from_string(bytes.fromhex(SECRET_KEY), curve=ecdsa.SECP256k1)
-
+def verify_signature(file):
     # Read PDF
     pdf_reader = PyPDF2.PdfReader(file)
     signature_text = pdf_reader.metadata.get('/Signature', '')
@@ -51,9 +50,4 @@ def verify_signature(file, SECRET_KEY):
     pdf_data.seek(0)
     pdf_content = pdf_data.read()
 
-    # Verify signature
-    try:
-        public_key.verify(signature, pdf_content)
-        return True
-    except ecdsa.BadSignatureError:
-        return False
+    return decdsa.verify(pdf_content,signature)

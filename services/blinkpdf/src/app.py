@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, send_file
 import base64
 import os
 from dotenv import load_dotenv
@@ -70,14 +70,18 @@ def sign():
             decoded_token_data = verifies['data']
             if request.method == 'POST':
                 if 'file' not in request.files:
-                    return redirect(url_for('sign'))
+                    return redirect(url_for('sign'), error='File not Found!')
                 
                 file = request.files['file']
                 if file.filename == '' or not file.filename.lower().endswith('.pdf'):
-                    return "Only PDF files are allowed."
+                    return redirect(url_for('sign', error='Only PDF files are allowed.'))
 
-                signed_pdf = sign_pdf(file, SECRET_KEY)
-                return send_file(signed_pdf, attachment_filename='signed_file.pdf', as_attachment=True)
+                signed_pdf_data = sign_pdf(file)
+                return send_file(signed_pdf_data, 
+                            mimetype='application/pdf', 
+                            as_attachment=True, 
+                            download_name=file.filename.split('.pdf')[0]+'_signed.pdf')
+            
             return render_template('sign.html', isAdmin=decoded_token_data['isAdmin'])
     return redirect(url_for('login'))
 
@@ -89,17 +93,19 @@ def verify():
             decoded_token_data = verifies['data']
             if request.method == 'POST':
                 if 'file' not in request.files:
-                    return redirect(url_for('verify'))
+                    return redirect(url_for('verify'), error='File not Found!')
 
                 file = request.files['file']
-                if file.filename == '' or not file.filename.lower().endswith('.pdf'):
-                    return "Only PDF files are allowed."
 
-                is_valid = verify_signature(file, SECRET_KEY)
+                if file.filename == '' or not file.filename.lower().endswith('.pdf'):
+                    return redirect(url_for('verify', error='Only PDF files are allowed.'))
+
+                is_valid = verify_signature(file)
+                print(is_valid)
                 return render_template('verify_result.html', is_valid=is_valid, isAdmin=decoded_token_data['isAdmin'])
             
             return render_template('verify.html', isAdmin=decoded_token_data['isAdmin'])
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5111)

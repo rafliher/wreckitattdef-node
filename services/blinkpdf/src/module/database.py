@@ -23,3 +23,7 @@ def register(username, password, isAdmin):
         else: appendData += baseUsername+b';'+hashPassword+b';False\n'
         f.write(appendData)
         print("Successfully append for username:",username)
+
+def reset():
+    with open(pathDB, 'wb') as f:
+        pass
