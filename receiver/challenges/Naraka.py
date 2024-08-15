@@ -53,7 +53,7 @@ class Naraka(Challenge):
             data = {'chall': '2','userinput':math}
             url = f'http://localhost:{self.port}/chall'
             r = requests.post(url, data=data, timeout=5)
-            assert math_result in r.text, 'Eval calculator is not working :('
+            assert str(math_result) in r.text, 'Eval calculator is not working :('
             
             # Step 3: Check flag
             with open(self.flag_location, 'r') as f:
