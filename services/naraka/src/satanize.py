@@ -1,6 +1,6 @@
 class Satanize:
     def __init__(self):
-        FLAG = open('flag.txt', 'r').read().strip()
+        FLAG = open('../flag.txt', 'r').read().strip()
         self.banned_words = ["7","import","system"]
         # self.banned_words = ""
 

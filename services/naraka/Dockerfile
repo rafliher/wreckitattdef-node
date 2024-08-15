@@ -26,7 +26,7 @@ RUN pip3 install flask==3.0.2 --break-system-packages
 
 
 COPY /src .
-COPY flag.txt .
+COPY flag.txt ../
 
 # Restrict ctfuser access to only the working directory
 RUN chown -R ctfuser:ctfuser /app/scripts && \

@@ -6,7 +6,7 @@ import satanize
 app = Flask(__name__)
 
 # Load flag content
-with open('flag.txt', 'r') as file:
+with open('../flag.txt', 'r') as file:
     flag = file.read().strip()
 
 @app.route('/', methods=['GET', 'POST'])

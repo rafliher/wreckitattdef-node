@@ -3,7 +3,7 @@ import string
 
 BLACKLIST  =['FLAG','cat']
 # BLACKLIST = ""
-FLAG = open('flag.txt', 'r').read().strip()
+FLAG = open('../../flag.txt', 'r').read().strip()
 
 def security_check(user_input, blacklist):
     for bl in blacklist:
