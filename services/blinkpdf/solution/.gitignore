@@ -1,0 +1,6 @@
+.env
+__pycache__/
+
+# Ignore flags and history
+history/*.txt
+flags/*.txt

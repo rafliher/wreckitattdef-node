@@ -7,7 +7,7 @@ curve = NIST256p
 order = int(curve.order)
 
 def case1():
-    ecdsa = ECDSA()
+    ecdsa = DECDSA()
     inc = 0
     for i in range(100):
         temp = random.randbytes(10)
