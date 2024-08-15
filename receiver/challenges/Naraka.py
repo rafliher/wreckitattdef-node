@@ -55,6 +55,15 @@ class Naraka(Challenge):
             r = requests.post(url, data=data, timeout=5)
             assert str(math_result) in r.text, 'Eval calculator is not working :('
             
+            # Step 3: Check exec that execute python program
+            ind = random.randint(0,2)
+            pythononeline = python_programs[ind]
+            pythonresult = programs_result[ind]
+            data = {'chall': '1','userinput':pythononeline}
+            url = f'http://localhost:{self.port}/chall'
+            r = requests.post(url, data=data, timeout=5)
+            assert pythonresult in r.text, 'My code line is not execute :('
+
             # Step 4: Check flag
             with open(self.flag_location, 'r') as f:
                 host_flag = f.read().strip()
