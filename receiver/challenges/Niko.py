@@ -4,6 +4,7 @@ import io
 import requests
 import random
 import subprocess
+import json
 
 class Niko(Challenge):
     flag_location = 'flags/niko.txt'
@@ -55,27 +56,24 @@ class Niko(Challenge):
             # Step 2: Check if the webpage can be accessed
             url = f'http://localhost:{self.port}/'
             response = requests.get(url)
-            assert response.status_code == 200, 'Webpage is not accessible'
+            status_code = response.status_code
+            assert status_code == 200, 'Webpage is not accessible'
             self.logger.info('Webpage accessibility check passed for niko')
 
             # Step 3: Check if the output of the specific URL equals the expected string
             urlFlag = f'http://localhost:{self.port}/api/getFlag?flag=1'
             expected_output = "(⋟﹏⋞) 私をバカにしようとしているのか (´ ͡༎ຶ ͜ʖ ͡༎ຶ `)︵‿︵"
-            response = requests.get(urlFlag)
-            assert response.text.strip() == expected_output, 'Webpage output does not match expected output'
+            response2 = requests.get(urlFlag)
+            assert response2.text.strip() == expected_output, 'Webpage output does not match expected output'
             self.logger.info('Webpage output check passed for niko')
             
             # Step 4: Check if the chat endpoint is working
-            try:
-                urlChat = f'http://localhost:{self.port}/api/chat'
-                data = 'test'
-                response = requests.post(urlChat, data=data)
-                assert response.text.strip() in error_messages, 'Webpage is not accessible'
-                self.logger.info('Webpage delay check passed for niko')
-            except requests.exceptions.Timeout:
-                self.logger.error('Webpage request timed out')
-                return False
-
+            urlChat = f'http://localhost:{self.port}/api/chat'
+            data = 'test'
+            response3 = requests.post(urlChat, data=data)
+            assert json.loads(response3.text.strip()).get("output", "No message found") in error_messages, 'Api endpoint is not accessible'
+            self.logger.info('Webpage delay check passed for niko')
+            
             return True
 
         except Exception as e:
