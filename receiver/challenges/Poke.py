@@ -3,6 +3,7 @@ from .Challenge import Challenge
 import io
 import requests
 import random
+import subprocess
 
 class Poke(Challenge):
     flag_location = 'flags/poke.txt'
@@ -43,6 +44,18 @@ class Poke(Challenge):
             image_url = f'http://localhost:{self.port}/?image={pokemon_name.lower()}.png'
             r = requests.get(image_url, timeout=5)
             assert r.status_code == 200 and 'image/png' in r.headers['Content-Type'], 'Pokémon image not available or incorrect content type'
+            
+            # Step 3: Check if the flag still exists and matches the one in the container
+            with open(self.flag_location, 'r') as f:
+                host_flag = f.read().strip()
+
+            container_flag = subprocess.run(
+                ["docker", "exec", "poke_container", "cat", "/flag.txt"],
+                capture_output=True,
+                text=True
+            ).stdout.strip()
+            
+            assert host_flag == container_flag, 'Flag mismatch between host and container'
 
             self.logger.info('Check passed for poke')
             return True

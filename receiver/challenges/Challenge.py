@@ -29,6 +29,6 @@ class Challenge(object):
 
     def credentials(self):
         return {
-            'username': 'root',
+            'username': 'ctfuser',
             'password': getattr(self.settings, f'PASSWORD_{self.port}'),
         }

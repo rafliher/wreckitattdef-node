@@ -1,23 +1,16 @@
-# gemastik-xvi-final
-
+# wreckit-5.0-final
 
 ## challenges
-| challenges | author | category |
-| ---------- | ------ | -------- |
-| art | vidner | final |
-| back-to-basic | dummklloun | warmup |
-| burvesigner | deomkicer | final |
-| crawlback | vidner | warmup |
-| gemas-notes | dummklloun | final |
-| gemas-fetcher | ganezo | final |
-| hirnfick | circleous | final |
-| pasta | merricx | final |
-| s3 | deomkicer | warmup |
-| xl | vidner | final |
 
+| challenges | author      | category |
+| ---------- | ----------- | -------- |
+| poke       | jagungrebus | web      |
+| niko       | hanz0       | pwn      |
+| blinkpdf   | wondPing    | crypto   |
 
 ## how-to-run
 
-```
+````
 python3 starter.py --username <username> --password <password> --challenge <challenge>
-```"# AttDef_CTF_Platform" 
+```"# AttDef_CTF_Platform"
+````

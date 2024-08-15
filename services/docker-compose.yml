@@ -3,6 +3,7 @@ version: '3.1'
 services:
   # --- poke ---
   poke:
+    container_name: poke_container
     hostname: poke
     restart: always
     build:
@@ -19,3 +20,23 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
   # --- poke ---
+
+  # --- niko ---
+  niko:
+    container_name: niko_container
+    hostname: niko
+    restart: always
+    build:
+      context: niko
+      args:
+        - PASSWORD=$PASSWORD_15000
+    volumes:
+      - ../receiver/flags/niko.txt:/flag.txt:ro
+      - ../utils/bashrc:/root/.bashrc:ro
+      - ../utils/preexec.sh:/root/.preexec.sh:ro
+    ports:
+      - "15000:8000"
+      - "15022:22"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  # --- niko ---

@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  niko:
+    restart: always
+    container_name: niko
+    build:
+      context: ./
+      args:
+        - PASSWORD=PASSWORD_15000
+    ports:
+      - "15000:8000"
+      - "15022:22"
+    volumes:
+      - ./flag.txt:/flag.txt:ro
