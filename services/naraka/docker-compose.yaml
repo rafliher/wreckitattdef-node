@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  naraka:
+    restart: always
+    container_name: naraka
+    build:
+      context: ./
+      args:
+        - PASSWORD=PASSWORD_12000
+    ports:
+      - "12000:5000"
+      - "12022:22"
+    # volumes:
+    #   - ./flag.txt:/flag.txt:ro

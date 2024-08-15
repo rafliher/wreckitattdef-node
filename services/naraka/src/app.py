@@ -1,0 +1,76 @@
+from flask import Flask, request, render_template_string, render_template
+import subprocess
+import os
+import satanize
+
+app = Flask(__name__)
+
+# Load flag content
+with open('flag.txt', 'r') as file:
+    flag = file.read().strip()
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    return render_template("index.html", result="")
+
+@app.route('/chall', methods=['POST'])
+def chall():
+    userinput = ""
+    name = ""
+    if request.method == 'POST':
+        challindex = request.form['chall']
+        if challindex != '1' and challindex != '2':
+                return render_template("index.html", result="")
+        try:
+            userinput = request.form['input']
+        except Exception as e:
+            return render_template("chall.html", challindex = challindex, result = "")
+        if(userinput != ""):
+            print(challindex)
+            if challindex == '1':
+                script = "scripts/execute.py"
+            elif challindex == '2':
+                script = "scripts/evaluate.py"
+            try:
+                print("userinput",userinput)
+                result = subprocess.check_output(['python', script, userinput])
+                print(result)
+            except subprocess.CalledProcessError as e:
+                result = e.output.decode()
+            return render_template("chall.html", challindex = challindex, result=result)
+        else:
+            return render_template("chall.html", challindex = challindex, result = "")
+        
+@app.route('/render', methods=['GET'])            
+def render():
+    with open('templates/template.html', 'r') as file:
+            template = file.read()
+    name = request.args.get('name')
+    if name != "":
+        try:
+            stn = satanize.Satanize()
+            if(stn.satanizer(name)):
+                name = "Bad boy"
+                return render_template_string(template.replace("thisistemplate",name))
+        except Exception as e:
+            pass
+        return render_template_string(template.replace("thisistemplate",request.args.get('name')))
+    else:
+        return "Hello, send someting inside the param 'name'!"
+
+@app.route('/sourcecode/<challindex>', methods=['GET'])
+def sourcecode(challindex):
+    if challindex == '1':
+        sc = "scripts/execute.py"
+    elif challindex == '2':
+        sc = "scripts/evaluate.py"
+    elif challindex == '3':
+        sc = "satanize.py"
+    # Read the content of script.py
+    with open(sc, 'r') as script_file:
+        script_content = script_file.read()
+
+    return render_template("source.html", script_content=script_content)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=1)

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>It is not Jail, it is Hellllll</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+      /* Animasi flicker */
+      .flicker {
+        animation: flickerAnimation 0.1s infinite;
+      }
+
+      @keyframes flickerAnimation {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-black text-red-500 min-h-screen flex flex-col justify-center items-center flicker">
+    <div class="w-full max-w-md p-8 bg-gray-800 rounded-lg shadow-lg">
+      <h1 class="text-4xl font-bold text-center mb-8 text-red-600">It is not Jail, it is Hellllll</h1>
+      <a>{{desc}}</a>
+      <form method="POST" action="/chall" class="space-y-4">
+        <div>
+          <label for="input" class="block text-lg font-medium text-red-500">Input:</label>
+          <input type="text" id="input" name="input" class="w-full p-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600" required />
+        </div>
+        <input type="text" id="chall" name="chall" value="{{challindex}}" hidden />
+        <button type="submit" class="w-full p-3 mt-4 bg-red-600 hover:bg-red-700 text-white rounded font-bold">Submit</button>
+      </form>
+      <a href="/"><button class="w-full p-3 mt-4 bg-black hover:bg-gray-700 text-red rounded font-bold">Back</button></a>
+      <h2 class="text-2xl font-semibold mt-8 text-red-500">Output:</h2>
+      <pre class="bg-gray-900 p-4 rounded text-white mt-2">{{ result }}</pre>
+      <a href="/sourcecode/{{challindex}}" class="block mt-6 text-center text-red-400 hover:text-red-500 underline">Source code</a>
+    </div>
+    <!-- Include footer -->
+    {% include 'footer.html' %}
+  </body>
+</html>

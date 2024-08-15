@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wujud Aseli</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <style>
+      pre {
+        background-color: #cd0000;
+        color: rgb(249, 249, 249);
+        border-radius: 8px;
+        padding: 16px;
+        overflow-x: auto;
+        white-space: pre-wrap; /* Allows long lines to wrap */
+      }
+      pre,
+      code {
+        user-select: none; /* Disable text selection */
+        -webkit-user-select: none; /* Disable text selection in WebKit browsers */
+        -moz-user-select: none; /* Disable text selection in Mozilla browsers */
+        -ms-user-select: none; /* Disable text selection in Internet Explorer/Edge */
+        pointer-events: none; /* Prevent all mouse events */
+        cursor: default; /* Set cursor to default */
+      }
+      /* Animasi flicker */
+      .flicker {
+        animation: flickerAnimation 0.0666s infinite;
+      }
+
+      @keyframes flickerAnimation {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-red-900 text-gray-100 flex flex-col min-h-screen flicker">
+    <header class="bg-gray-800 text-center py-4">
+      <h1 class="text-2xl font-bold">Wujud Aseli</h1>
+    </header>
+    <main class="flex-grow p-8">
+      <h2 class="text-xl font-semibold mb-4">Source Code:</h2>
+      <pre><code class="language-python">{{ script_content | safe }}</code></pre>
+    </main>
+    <footer class="bg-gray-800 text-center py-4">Made with love by AODreamer</footer>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script>
+      // Highlight syntax after content is set
+      Prism.highlightAll();
+    </script>
+  </body>
+</html>

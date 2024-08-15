@@ -1,0 +1,44 @@
+{% include 'header.html' %}
+
+<!-- Main content -->
+<main class="flex-grow container mx-auto mt-10 bg-red-800">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="bg-red-700 rounded-lg shadow-lg p-4 text-center hover:bg-gray-900 cursor-pointer" id="div3" onclick="window.location.href = '/render?name=world!'">
+      <img src="{{ url_for('static', filename='images/greetings.png') }}" alt="Menu 3" class="mx-auto mb-4" />
+      <p class="text-lg font-semibold">Greetings</p>
+    </div>
+
+    <!-- Menu Box 2 -->
+    <div class="bg-red-700 rounded-lg shadow-lg p-4 text-center hover:bg-gray-900 cursor-pointer" id="div2">
+      <form id="challForm2" action="/chall" method="POST">
+        <input type="hidden" name="chall" value="2" />
+        <img src="{{ url_for('static', filename='images/evaluate.png') }}" alt="Menu 2" class="mx-auto mb-4" />
+        <p class="text-lg font-semibold">Evaluate</p>
+      </form>
+    </div>
+    <!-- Menu Box 1 -->
+    <div class="bg-red-700 rounded-lg shadow-lg p-4 text-center hover:bg-gray-900 cursor-pointer" id="div1">
+      <form id="challForm1" action="/chall" method="POST">
+        <input type="hidden" name="chall" value="1" />
+        <img src="{{ url_for('static', filename='images/execute.png') }}" alt="Menu 1" class="mx-auto mb-4" />
+        <p class="text-lg font-semibold">Execute</p>
+      </form>
+    </div>
+    <!-- Menu Box 3 -->
+  </div>
+</main>
+
+<script>
+  document.getElementById("div1").addEventListener("click", function () {
+    document.getElementById("challForm1").submit();
+  });
+  document.getElementById("div2").addEventListener("click", function () {
+    document.getElementById("challForm2").submit();
+  });
+  document.getElementById("div3").addEventListener("click", function () {
+    document.getElementById("challForm3").submit();
+  });
+</script>
+
+<!-- Include footer -->
+{% include 'footer.html' %}

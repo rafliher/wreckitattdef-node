@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NARAKA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+      /* Animasi flicker */
+      .flicker {
+          animation: flickerAnimation 0.1s infinite;
+      }
+
+      @keyframes flickerAnimation {
+          0% { opacity: 1; }
+          50% { opacity: 0.5; }
+          100% { opacity: 1; }
+      }
+  </style>
+  </head>
+  <body class="flex flex-col min-h-screen bg-red-800 flicker">
+    <header class="bg-red-600 text-white py-4">
+      <div class="container mx-auto text-center">
+        <h1 class="text-4xl font-bold">NARAKA</h1>
+      </div>
+    </header>
+
