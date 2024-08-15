@@ -50,11 +50,11 @@ class Poke(Challenge):
                 host_flag = f.read().strip()
 
             container_flag = subprocess.run(
-                ["docker", "exec", "services-poke-1", "cat", "/flag.txt"],
+                ["docker", "exec", "poke_container", "cat", "/flag.txt"],
                 capture_output=True,
                 text=True
             ).stdout.strip()
-
+            
             assert host_flag == container_flag, 'Flag mismatch between host and container'
 
             self.logger.info('Check passed for poke')

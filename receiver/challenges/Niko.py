@@ -3,6 +3,7 @@ from .Challenge import Challenge
 import io
 import requests
 import random
+import subprocess
 
 class Niko(Challenge):
     flag_location = 'flags/niko.txt'
@@ -31,10 +32,10 @@ class Niko(Challenge):
                 host_flag = f.read().strip()
 
             container_flag = subprocess.run(
-                ["docker", "exec", "services-niko-1", "cat", "/flag.txt"],
+                ["docker", "exec", "niko_container", "cat", "/flag.txt"],
                 capture_output=True,
                 text=True
-            ).stdout.strip()
+            ).stdout.strip()                    
 
             assert host_flag == container_flag, 'Flag mismatch between host and container'
             
