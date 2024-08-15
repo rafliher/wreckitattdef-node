@@ -1,11 +1,10 @@
 version: '3'
 services:
   blinkpdf:
-  build:
     restart: always
     build:
       context: .
       args:
           - FLAG={FLAG}
     ports:
-      - "10000:5111"
+      - "11000:5111"

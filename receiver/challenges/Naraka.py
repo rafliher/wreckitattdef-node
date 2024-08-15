@@ -55,12 +55,12 @@ class Naraka(Challenge):
             r = requests.post(url, data=data, timeout=5)
             assert math_result in r.text, 'Eval calculator is not working :('
             
-            # Step 3: Check exec that execute python program
+            # Step 3: Check flag
             with open(self.flag_location, 'r') as f:
                 host_flag = f.read().strip()
 
             container_flag = subprocess.run(
-                ["docker", "exec", "poke_container", "cat", "/flag.txt"],
+                ["docker", "exec", "naraka_container", "cat", "/flag.txt"],
                 capture_output=True,
                 text=True
             ).stdout.strip()
