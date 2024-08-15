@@ -28,6 +28,9 @@
             color: #333;
             text-align: center;
             padding: 50px;
+            margin: 0 !important;
+            height: 100vh;
+            box-sizing: border-box;
         }
         h1 {
             color: #ffcb05;
