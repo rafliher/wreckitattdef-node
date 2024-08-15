@@ -25,6 +25,19 @@ class Niko(Challenge):
 
     def check(self):
         try:
+            
+            # Step 3: Check if the flag still exists and matches the one in the container
+            with open(self.flag_location, 'r') as f:
+                host_flag = f.read().strip()
+
+            container_flag = subprocess.run(
+                ["docker", "exec", "services-niko-1", "cat", "/flag.txt"],
+                capture_output=True,
+                text=True
+            ).stdout.strip()
+
+            assert host_flag == container_flag, 'Flag mismatch between host and container'
+            
             self.logger.info('Check passed for niko')
             return True
 
