@@ -28,7 +28,7 @@ COPY src/ .
 RUN touch /flag.txt
 
 # Generate a random flag and write it to /opt/flag
-RUN python3 -c "import random; import string; flag = ''.join(random.choices(string.ascii_letters + string.digits, k=8)); open('/opt/flag', 'w').write(flag)"
+RUN python3 -c "import random; import string; flag = ''.join(random.choices(string.digits, k=8)); open('/opt/flag', 'w').write(flag)"
 
 RUN pip install -r requirements.txt
 RUN chmod +x ./start.sh
