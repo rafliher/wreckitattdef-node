@@ -32,7 +32,7 @@ class Niko(Challenge):
                 host_flag = f.read().strip()
 
             container_flag = subprocess.run(
-                ["docker", "exec", "services_niko_1", "cat", "/flag.txt"],
+                ["docker", "exec", "niko_container", "cat", "/flag.txt"],
                 capture_output=True,
                 text=True
             ).stdout.strip()                    
