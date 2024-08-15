@@ -6,6 +6,6 @@ services:
     build:
       context: .
       args:
-          - PASSWORD=root
+          - FLAG={FLAG}
     ports:
       - "10000:5111"

@@ -4,12 +4,10 @@ RUN apt-get update && apt-get install -y nano
 
 WORKDIR /opt
 COPY ./src .
-COPY .env /opt/.env
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-ARG FLAG
-RUN echo $FLAG > flag && chmod 444 flag
+COPY ./flag.txt /opt/flag.txt
 
 COPY ./main.sh /main.sh
 

@@ -3,12 +3,24 @@ import base64
 import os
 from dotenv import load_dotenv
 from module import sign_pdf, verify_signature, handleLogin
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
+import hashlib
+
+FLAG = open("flag.txt","rb").read()
 
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
+
+def encrypt(message):
+    PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+    key = hashlib.sha256(bytes.fromhex(PRIVATE_KEY)).digest()[:16]
+    cipher = AES.new(key, AES.MODE_CBC, iv=os.urandom(16))
+    ciphertext = cipher.iv + cipher.encrypt(pad(message,16))
+    return ciphertext.hex()
 
 def generate_token(username, isAdmin):
     token_string = f"{username}:{SECRET_KEY}:{isAdmin}"
@@ -32,7 +44,8 @@ def admin_panel():
         if(verifies['status']):
             decoded_token_data = verifies['data'] 
             if decoded_token_data['isAdmin']:
-                return render_template('admin_panel.html', isAdmin=decoded_token_data['isAdmin'])
+                encrypted_flag = encrypt(FLAG)
+                return render_template('admin_panel.html', isAdmin=decoded_token_data['isAdmin'], enc_flag=encrypted_flag)
     return redirect(url_for('index'))
 
 @app.route('/')
@@ -101,7 +114,6 @@ def verify():
                     return redirect(url_for('verify', error='Only PDF files are allowed.'))
 
                 is_valid = verify_signature(file)
-                print(is_valid)
                 return render_template('verify_result.html', is_valid=is_valid, isAdmin=decoded_token_data['isAdmin'])
             
             return render_template('verify.html', isAdmin=decoded_token_data['isAdmin'])
