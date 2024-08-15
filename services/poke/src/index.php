@@ -22,7 +22,9 @@
     <style>
         body {
             font-family: 'Press Start 2P', sans-serif;
-            background-color: #f8f8f8;
+            background: url('/bg.gif');
+            background-size: cover;
+            background-repeat: no-repeat;
             color: #333;
             text-align: center;
             padding: 50px;
@@ -66,7 +68,8 @@
             margin-bottom: 20px;
         }
         img {
-            width: 300px;
+            width: 500px;
+            background-color: wheat;
             height: auto;
             border: 5px solid #ffcb05;
             border-radius: 15px;
@@ -85,6 +88,25 @@
         <input type="text" id="pokemon_name" name="pokemon_name" required>
         <button type="submit">Fetch Pokémon</button>
     </form>
+
+    <audio id="bgMusic" loop>
+        <source src="/bgintro.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function play(){
+            var bgMusic = document.getElementById('bgMusic');
+            if (bgMusic.paused) {
+                bgMusic.play();
+            }
+        }
+        document.body.addEventListener('click', function() {
+            play()
+        }, { once: true });
+        document.body.addEventListener('mouseover', function() {
+            play()
+        }, { once: true });
+    </script>
 
     <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
