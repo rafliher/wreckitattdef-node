@@ -53,10 +53,7 @@ class Wanderer(Challenge):
             response = session.get(edit_url_html)
             assert response.status_code == 200, 'Edit page not accessible'
             # Simulate submitting the edit form
-            edit_data = {
-                'type': 'html',
-                'data': '<h1>Test Content</h1>'
-            }
+            edit_data = {'data': '<h1>CONTOH!!!</h1>', 'type':'html';}
             response = session.post(edit_url_html, data=edit_data)
             assert "Edit Success" in response.text, 'Edit HTML failed'
 
@@ -69,12 +66,9 @@ class Wanderer(Challenge):
             response = self.session.get(edit_url_js)
             assert response.status_code == 200, 'Edit page not accessible'
             # Simulate submitting the edit form
-            edit_data = {
-                'type': 'js',
-                'data': 'console.log("CONTOH!!");'
-            }
+            edit_data = {'data': 'console.log("CONTOH!!")', 'type':'js'}
             response = session.post(edit_url, data=edit_data)
-            assert "Edit Success" in response.text, 'Edit failed'
+            assert "Edit Success" in response.text, 'Edit JS failed'
 
             # Step 6: Check Edit CSS Functionality
             edit_url_css = f'http://localhost:{self.port}/index.php?module=user&action=edit&type=css'
@@ -85,8 +79,8 @@ class Wanderer(Challenge):
                 'type': 'css',
                 'data': 'h1 { color: rgb(73, 35, 240) }'
             }
-            response = self.session.post(edit_url, data=edit_data)
-            assert "Edit Success" in response.text, 'Edit failed'
+            response = self.session.post(edit_url_css, data=edit_data)
+            assert "Edit Success" in response.text, 'Edit CSS failed'
             
             # Step 7: Check flag
             with open(self.flag_location, 'r') as f:
