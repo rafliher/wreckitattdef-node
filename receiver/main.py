@@ -4,6 +4,7 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from config import get_settings
 
 from challenges.Poke import Poke
+from challenges.Wanderer import Wanderer
 from challenges.Naraka import Naraka
 from challenges.Niko import Niko
 from challenges.Blinkpdf import BlinkPDF
@@ -16,8 +17,9 @@ settings = get_settings()
 
 challenges = {
     "poke": Poke(10000),
+    "blinkpdf": BlinkPDF(11000),
     "naraka": Naraka(12000),
-    "blinkpdf": BlinkPDF(14000),
+    "wanderer": Wanderer(13000),
     "niko": Niko(15000),
 }
 

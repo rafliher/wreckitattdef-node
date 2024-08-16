@@ -21,6 +21,26 @@ services:
       - "host.docker.internal:host-gateway"
   # --- poke ---
 
+  # --- blinkpdf ---
+  blinkpdf:
+    container_name: blinkpdf_container
+    hostname: blinkpdf
+    restart: always
+    build:
+      context: blinkpdf
+      args:
+        - PASSWORD=$PASSWORD_11000
+    volumes:
+      - ../receiver/flags/blinkpdf.txt:/flag.txt:ro
+      - ../utils/bashrc:/root/.bashrc:ro
+      - ../utils/preexec.sh:/root/.preexec.sh:ro
+    ports:
+      - "11000:5111"
+      - "11022:22"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  # --- blinkpdf ---
+
   # --- naraka ---
   naraka:
     container_name: naraka_container
@@ -29,7 +49,7 @@ services:
     build:
       context: naraka
       args:
-        - PASSWORD=$PASSWORD_15000
+        - PASSWORD=$PASSWORD_12000
     volumes:
       - ../receiver/flags/naraka.txt:/flag.txt:ro
       - ../utils/bashrc:/root/.bashrc:ro
@@ -40,6 +60,26 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
   # --- naraka ---
+
+  # --- wanderer ---
+  wanderer:
+    container_name: wanderer_container
+    hostname: wanderer
+    restart: always
+    build:
+      context: wanderer
+      args:
+        - PASSWORD=$PASSWORD_13000
+    volumes:
+      - ../receiver/flags/wanderer.txt:/flag.txt:ro
+      - ../utils/bashrc:/root/.bashrc:ro
+      - ../utils/preexec.sh:/root/.preexec.sh:ro
+    ports:
+      - "13000:80"
+      - "13022:22"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  # --- wanderer ---
 
   # --- niko ---
   niko:
