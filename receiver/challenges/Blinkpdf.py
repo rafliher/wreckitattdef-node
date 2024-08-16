@@ -4,6 +4,7 @@ from modules.blinkpdf import *
 import io
 import requests
 import subprocess
+import re
 
 class BlinkPDF(Challenge):
     flag_location = 'flags/blinkpdf.txt'
