@@ -14,7 +14,7 @@ class Util {
     }
 
     public function alertExit($str, $back = 1){
-        echo "<script>alert(`$str`); window.location.href = 'index.tpl';</script>; if($back) history.back();";
+        echo "<script>alert(`$str`); window.location.href = '/';</script>; if($back) history.back();";
         ;
         exit();
 
