@@ -1,13 +1,13 @@
-from backup import *
+from src.module.decdsa import *
 import random
 import hashlib
 from sage.all import matrix, Integer, Zmod, vector
-from ecdsa import SECP256k1
-curve = SECP256k1
+from ecdsa import NIST256p
+curve = NIST256p
 order = int(curve.order)
 
 def case1():
-    ecdsa = ECDSA()
+    ecdsa = DECDSA()
     inc = 0
     for i in range(100):
         temp = random.randbytes(10)
@@ -44,21 +44,25 @@ def case2():
     for i in range(inc):
         temp = random.randbytes(10)
         signature = ecdsa.sign(temp)
-        r, s = ecdsa.bytes_to_sign(signature)
-        md = hashlib.sha256(temp).digest()
-        m = int.from_bytes(md, byteorder='big') % order
-        dataset.append([temp, m, r, s])
+        r1, r2, s = ecdsa.bytes_to_sign(signature)
+        message = temp
+        m1, m2 = message[:len(message)//2], message[len(message)//2:]
+        h1 = hashlib.sha256(m1).digest()
+        h2 = hashlib.sha256(m2).digest()
+        z1 = int.from_bytes(h1, byteorder='big') % order
+        z2 = int.from_bytes(h2, byteorder='big') % order
+        dataset.append([temp, z1, z2, r1, r2, s])
 
     # B = 2**247
-    B = 2**100
+    B = 2**201
     p = order
     Zn = Zmod(p)
-    m = [[order,0] + [-Integer((pow(dataset[i-1][3], -1, order)*dataset[i-1][1]-pow(dataset[i][3], -1, order)*dataset[i][1])%order) for i in range(1, inc)]]
-    m += [[0,Integer(B)/order] + [Integer((pow(dataset[i-1][3], -1, order)*dataset[i-1][2]-pow(dataset[i][3], -1, order)*dataset[i][2])%order) for i in range(1, inc)]]
+
+    m = [[order,0] + [-Integer((pow(dataset[i-1][5], -1, order)*(dataset[i-1][1]+dataset[i-1][2])-pow(dataset[i][5], -1, order)*(dataset[i][1]+dataset[i][2]))%order) for i in range(1, inc)]]
+    m += [[0,Integer(B)/order] + [Integer((pow(dataset[i-1][5], -1, order)*(dataset[i-1][3]+dataset[i-1][4])-pow(dataset[i][5], -1, order)*(dataset[i][3]+dataset[i][4]))%order) for i in range(1, inc)]]
     inc -= 1
     m += [[0,0]+[0]*i+[order]+[0]*(inc-i-1) for i in range(inc)]
 
-    Y = vector([1, 1]+[0]*(inc))
     Mat = matrix(m)
     # W = Babai_closest_vector(Mat, Y)
     # x = W[1] * (p-1) / 2

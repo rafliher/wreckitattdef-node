@@ -7,7 +7,7 @@ COPY ./src .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./flag.txt /opt/flag.txt
+COPY ./flag.txt /flag.txt
 
 COPY ./main.sh /main.sh
 

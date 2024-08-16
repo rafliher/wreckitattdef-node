@@ -1,6 +1,6 @@
 import requests
 from io import BytesIO
-from signature import *
+from src.module import *
 port = 5111
 
 sess = requests.Session()
@@ -39,3 +39,12 @@ filedata = {'file': sendata}
 r = sess.post(verify_url, files=filedata, timeout=5)
 # print(r.text)
 print('The signature is invalid' in r.text)
+
+url = f'http://localhost:{port}/login'
+data = {'username': "admin", "password": f'{PRIVATE_KEY}'}
+r = sess.post(url, data=data, timeout=5)
+assert 'Welcome to PDF Signature App'.lower() in r.text.lower(), 'Cannot login as admin'
+url = f'http://localhost:{port}/admin_panel'
+r = sess.get(url, timeout=5)
+enc_flag = r.text.split('encrypted flag: ')[1].split('</p>')[0]
+print(decryptMessage(enc_flag, PRIVATE_KEY))

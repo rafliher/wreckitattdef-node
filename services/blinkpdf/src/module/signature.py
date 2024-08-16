@@ -1,12 +1,8 @@
-from module.decdsa import DECDSA
+from .decdsa import DECDSA
 import PyPDF2
 import io
-import os
-from dotenv import load_dotenv
-load_dotenv()
 
-def sign_pdf(file):
-    PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+def sign_pdf(file, PRIVATE_KEY):
     decdsa = DECDSA(privateKey=PRIVATE_KEY)
     pdf_reader = PyPDF2.PdfReader(file)
     pdf_writer = PyPDF2.PdfWriter()
@@ -24,8 +20,7 @@ def sign_pdf(file):
     signed_pdf.seek(0)
     return signed_pdf
 
-def verify_signature(file):
-    PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+def verify_signature(file, PRIVATE_KEY):
     decdsa = DECDSA(privateKey=PRIVATE_KEY)
     pdf_reader = PyPDF2.PdfReader(file)
     signature_text = pdf_reader.metadata.get('/Signature', '')

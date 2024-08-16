@@ -19,7 +19,6 @@ challenges = {
     "niko": Niko(15000),
 }
 
-
 class Flag(BaseModel):
     flag: str
     challenge: str

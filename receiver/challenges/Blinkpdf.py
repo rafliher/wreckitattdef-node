@@ -3,7 +3,6 @@ from modules.blinkpdf import *
 
 import io
 import requests
-import random
 import subprocess
 
 class Poke(Challenge):
@@ -26,7 +25,6 @@ class Poke(Challenge):
             return False
 
     def check(self):
-
         try:
             # Getting private key
             container_env = subprocess.run(
@@ -74,15 +72,25 @@ class Poke(Challenge):
             r = sess.post(verify_url, files=filedata, timeout=5)
             assert 'The signature is invalid' in r.text, 'Verify function not working or algoritm verify process is changed for invalid signature'
             
-            # Checking C4: Login as admin
+            # Checking C4: Login as admin and enc_flag checking
             url = f'http://localhost:{self.port}/login'
             data = {'username': "admin", "password": f'{private_key}'}
             r = sess.post(url, data=data, timeout=5)
-            assert 'Welcome to PDF Signature App'.lower() in r.text.lower(), 'Cannot login as user'
+            assert 'Welcome to PDF Signature App'.lower() in r.text.lower(), 'Cannot login as admin'
+            url = f'http://localhost:{self.port}/admin_panel'
+            r = sess.get(url, timeout=5)
+            enc_flag = r.text.split('encrypted flag: ')[1].split('</p>')[0]
+            assert decryptMessage(enc_flag, private_key).decode() == host_flag, 'Change algorithm for encryption flag'
 
-            pdfpath = 'files/blinkpdf_hellodocs.pdf'
-            pdfbytes = open(pdfpath, 'rb').read()
+            # Checking C5: Checking flag on container
+            with open(self.flag_location, 'r') as f:
+                host_flag = f.read().strip()
 
+            container_flag = subprocess.run(
+                ["docker", "exec", "blinkpdf_container", "cat", "/flag.txt"],
+                capture_output=True,
+                text=True
+            ).stdout.strip()
             assert host_flag == container_flag, 'Flag mismatch between host and container'
 
             self.logger.info('Check passed for blinkpdf')
