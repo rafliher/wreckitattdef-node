@@ -53,7 +53,7 @@ class Wanderer(Challenge):
             response = session.get(edit_url_html)
             assert response.status_code == 200, 'Edit page not accessible'
             # Simulate submitting the edit form
-            edit_data = {'data': '<h1>CONTOH!!!</h1>', 'type':'html';}
+            edit_data = {'data': '<h1>CONTOH!!!</h1>', 'type':'html'}
             response = session.post(edit_url_html, data=edit_data)
             assert "Edit Success" in response.text, 'Edit HTML failed'
 
