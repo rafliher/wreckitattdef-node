@@ -5,6 +5,7 @@
 | challenges | author      | category |
 | ---------- | ----------- | -------- |
 | poke       | jagungrebus | web      |
+| wanderer   | ZeroEXP     | web      |
 | niko       | hanz0       | pwn      |
 | blinkpdf   | wondPing    | crypto   |
 
