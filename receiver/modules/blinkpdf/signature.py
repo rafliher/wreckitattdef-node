@@ -1,4 +1,4 @@
-from blinkpdf.decdsa import DECDSA
+from .decdsa import DECDSA
 import PyPDF2
 import io
 
