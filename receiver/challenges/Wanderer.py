@@ -49,7 +49,7 @@ class Wanderer(Challenge):
             assert found_uuids, 'UUID not found'
 
             # Step 4: Check Edit HTML Functionality
-            edit_url_html = f'http://{self.base_url}:{self.port}/index.php?module=user&action=edit&type=html'
+            edit_url_html = f'http://localhost:{self.port}/index.php?module=user&action=edit&type=html'
             response = self.session.get(edit_url_html)
             assert response.status_code == 200, 'Edit page not accessible'
             # Simulate submitting the edit form
@@ -65,7 +65,7 @@ class Wanderer(Challenge):
             assert '<h1>CONTOH!!!</h1>' in response.text, 'Edited content was not saved correctly'
 
             # Step 5: Check Edit JS Functionality
-            edit_url_js = f'http://{self.base_url}:{self.port}/index.php?module=user&action=edit&type=js'
+            edit_url_js = f'http://localhost:{self.port}/index.php?module=user&action=edit&type=js'
             response = self.session.get(edit_url_js)
             assert response.status_code == 200, 'Edit page not accessible'
             # Simulate submitting the edit form
@@ -77,7 +77,7 @@ class Wanderer(Challenge):
             assert "Edit Success" in response.text, 'Edit failed'
 
             # Step 6: Check Edit CSS Functionality
-            edit_url_css = f'http://{self.base_url}:{self.port}/index.php?module=user&action=edit&type=css'
+            edit_url_css = f'http://localhost:{self.port}/index.php?module=user&action=edit&type=css'
             response = self.session.get(edit_url_css)
             assert response.status_code == 200, 'Edit page not accessible'
             # Simulate submitting the edit form
