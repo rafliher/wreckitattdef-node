@@ -6,8 +6,7 @@ import satanize
 app = Flask(__name__)
 
 # Load flag content
-with open('../flag.txt', 'r') as file:
-    flag = file.read().strip()
+FLAG = open('../flag.txt', 'r').read().strip()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -34,8 +33,8 @@ def chall():
         
         if(userinput != ""):
             try:
-                print("userinput",userinput)
-                result = subprocess.check_output(['python', script, userinput])
+                FLAG = open('../flag.txt', 'r').read().strip()
+                result = subprocess.check_output(['python', script, userinput, FLAG])
                 print(result)
             except subprocess.CalledProcessError as e:
                 result = e.output.decode()
