@@ -24,7 +24,6 @@ RUN apt update
 RUN apt install python3-pip -y
 RUN pip3 install flask==3.0.2 --break-system-packages
 
-
 COPY /src .
 COPY flag.txt ../
 
