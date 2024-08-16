@@ -47,8 +47,48 @@ class Wanderer(Challenge):
             uuid_pattern = re.compile(r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}')
             found_uuids = uuid_pattern.findall(response.text)
             assert found_uuids, 'UUID not found'
+
+            # Step 4: Check Edit HTML Functionality
+            edit_url_html = f'http://{self.base_url}:{self.port}/index.php?module=user&action=edit&type=html'
+            response = self.session.get(edit_url_html)
+            assert response.status_code == 200, 'Edit page not accessible'
+            # Simulate submitting the edit form
+            edit_data = {
+                'type': 'html',
+                'data': '<h1>Test Content</h1>'
+            }
+            response = self.session.post(edit_url_html, data=edit_data)
+            assert "Edit Success" in response.text, 'Edit failed'
+
+            # Verify the content was saved correctly
+            response = self.session.get(view_page_url)
+            assert '<h1>CONTOH!!!</h1>' in response.text, 'Edited content was not saved correctly'
+
+            # Step 5: Check Edit JS Functionality
+            edit_url_js = f'http://{self.base_url}:{self.port}/index.php?module=user&action=edit&type=js'
+            response = self.session.get(edit_url_js)
+            assert response.status_code == 200, 'Edit page not accessible'
+            # Simulate submitting the edit form
+            edit_data = {
+                'type': 'js',
+                'data': 'console.log("CONTOH!!");'
+            }
+            response = self.session.post(edit_url, data=edit_data)
+            assert "Edit Success" in response.text, 'Edit failed'
+
+            # Step 6: Check Edit CSS Functionality
+            edit_url_css = f'http://{self.base_url}:{self.port}/index.php?module=user&action=edit&type=css'
+            response = self.session.get(edit_url_css)
+            assert response.status_code == 200, 'Edit page not accessible'
+            # Simulate submitting the edit form
+            edit_data = {
+                'type': 'css',
+                'data': 'h1 { color: rgb(73, 35, 240) }'
+            }
+            response = self.session.post(edit_url, data=edit_data)
+            assert "Edit Success" in response.text, 'Edit failed'
             
-            # Step 4: Check flag
+            # Step 7: Check flag
             with open(self.flag_location, 'r') as f:
                 host_flag = f.read().strip()
 
