@@ -30,4 +30,4 @@ RUN chown -R ctfuser:ctfuser /opt && \
 
 RUN chmod +x /main.sh
 
-CMD service ssh start && ./main.sh
+CMD service ssh start && /main.sh
