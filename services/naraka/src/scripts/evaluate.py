@@ -2,7 +2,7 @@ import sys
 import string
 BLACKLIST  ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 # BLACKLIST = ""
-FLAG = open('../../flag.txt', 'r').read().strip()
+FLAG = sys.argv[2]
 
 
 def security_check(user_input, blacklist):
