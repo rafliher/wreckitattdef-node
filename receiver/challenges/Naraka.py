@@ -36,10 +36,10 @@ class Naraka(Challenge):
         math_expression = "+-*/"
 
         python_programs = [
-            "a = 10;b = 5;print(a+b)", "a = 'add'; b='string';print(a+b)"
+            "a = 10;b = 5;print(a+b)", "a = 'add'; b='string';print(a+b)","x = [1,2,3,4,5,6,7,8];print(max(x))"
         ]
 
-        programs_result = ["b&#39;15","b&#39;addstring",]
+        programs_result = ["b&#39;15","b&#39;addstring","b&#39;8"]
         try:
             # Step 1: Chekc Greetings return name
             name =  random.choice(random_name)
@@ -55,7 +55,16 @@ class Naraka(Challenge):
             r = requests.post(url, data=data, timeout=5)
             assert str(math_result) in r.text, 'Eval calculator is not working :('
             
-            # Step 3: Check flag
+            # Step 3: Check exec that execute python program
+            ind = random.randint(0,2)
+            pythononeline = python_programs[ind]
+            pythonresult = programs_result[ind]
+            data = {'chall': '1','userinput':pythononeline}
+            url = f'http://localhost:{self.port}/chall'
+            r = requests.post(url, data=data, timeout=5)
+            assert pythonresult in r.text, 'My code line is not execute :('
+
+            # Step 4: Check flag
             with open(self.flag_location, 'r') as f:
                 host_flag = f.read().strip()
 
