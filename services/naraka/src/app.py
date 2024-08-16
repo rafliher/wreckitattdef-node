@@ -25,21 +25,22 @@ def chall():
             userinput = request.form['input']
         except Exception as e:
             return render_template("chall.html", challindex = challindex, result = "")
-        if(userinput != ""):
-            print(challindex)
-            if challindex == '1':
+        if challindex == '1':
                 script = "scripts/execute.py"
-            elif challindex == '2':
+                desc = "It will execute every single line code: a = 5;b = 4;print(a+b), x = 23;y = 23;print(x==y), etc"
+        elif challindex == '2':
                 script = "scripts/evaluate.py"
+                desc = "It will calculate your sins: 1+1, 2*2, etc"
+        if(userinput != ""):
             try:
                 print("userinput",userinput)
                 result = subprocess.check_output(['python', script, userinput])
                 print(result)
             except subprocess.CalledProcessError as e:
                 result = e.output.decode()
-            return render_template("chall.html", challindex = challindex, result=result)
+            return render_template("chall.html", challindex = challindex, result=result, desc = desc)
         else:
-            return render_template("chall.html", challindex = challindex, result = "")
+            return render_template("chall.html", challindex = challindex, result = "", desc = desc)
         
 @app.route('/render', methods=['GET'])            
 def render():

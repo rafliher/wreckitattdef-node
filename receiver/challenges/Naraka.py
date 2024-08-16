@@ -33,7 +33,7 @@ class Naraka(Challenge):
             "eevee", "snorlax", "magikarp", "growlithe", "abra"
         ]
 
-        math_expression = "+-*/"
+        math_expression = "+-*"
 
         python_programs = [
             "a = 10;b = 5;print(a+b)", "a = 'add'; b='string';print(a+b)","x = [1,2,3,4,5,6,7,8];print(max(x))"
@@ -50,7 +50,7 @@ class Naraka(Challenge):
             # Step 2: Check eval calculator using random math expression
             math = f'{random.randint(1,100)}{random.choice(math_expression)}{random.randint(1,100)}'
             math_result = eval(math)
-            data = {'chall': '2','userinput':math}
+            data = {'chall': '2','input':math}
             url = f'http://localhost:{self.port}/chall'
             r = requests.post(url, data=data, timeout=5)
             assert str(math_result) in r.text, 'Eval calculator is not working :('
@@ -59,7 +59,7 @@ class Naraka(Challenge):
             ind = random.randint(0,2)
             pythononeline = python_programs[ind]
             pythonresult = programs_result[ind]
-            data = {'chall': '1','userinput':pythononeline}
+            data = {'chall': '1','input':pythononeline}
             url = f'http://localhost:{self.port}/chall'
             r = requests.post(url, data=data, timeout=5)
             assert pythonresult in r.text, 'My code line is not execute :('
