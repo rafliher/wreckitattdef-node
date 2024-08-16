@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: php-apache-container
+    ports:
+      - "13000:80"
+    environment:
+      - PASS=useruseruseruser
+    volumes:
+      - ./app:/var/www/html
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    networks:
+      - webnet
+
+networks:
+  webnet:
