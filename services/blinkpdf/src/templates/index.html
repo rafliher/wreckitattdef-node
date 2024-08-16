@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #f0f8ff;
+            background-color: #e8f5e9;
         }
         
         .navbar {
-            background-color: #004080;
+            background-color: #004d40;
         }
         
         .navbar-nav a {
@@ -20,14 +20,80 @@
         }
         
         .card {
-            margin: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-body {
+            text-align: center;
+        }
+        
+        .hero-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .additional-images {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .additional-images img {
+            max-width: 300px;
+            max-height: 200px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gif-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .gif-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .btn-custom {
+            background-color: #004d40;
+            color: #ffffff;
+        }
+        
+        .btn-custom:hover {
+            background-color: #00332c;
         }
         
         .toast {
-            position: absolute;
+            position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1050;
+        }
+        
+        .toast-header {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .toast-body {
+            color: #721c24;
+        }
+        
+        .image-logos-main {
+            max-width: 300px;
+            max-height: 300px;
+            margin: 20px 0;
+        }
+        
+        .list-unstyled li {
+            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -37,12 +103,39 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <h1 class="mt-5">Welcome to PDF Signature App</h1>
-                <p class="lead">Use the menu to sign or verify PDF files.</p>
+            <div class="col-md-12 text-center">
+                <h1 class="mt-5">Welcome to the PDF Signature App!</h1>
+                <p class="lead mt-3">
+                    Explore our app to seamlessly sign and verify PDF files. With just a few clicks, you can ensure the authenticity and integrity of your documents. Our app offers a user-friendly interface and robust features to manage your PDF signatures effectively.
+                </p>
+                <img class="image-logos-main" src="https://external-preview.redd.it/DZRHg1I72mCNKePOqfqjkBW-7ugWeHrLHvQoerMop48.png?auto=webp&s=2059aa00df1ce0286f68ef54e573ffae680c7453" alt="PDF Signature App" class="hero-image">
+                <div class="gif-container">
+                    <img src="https://media.idownloadblog.com/wp-content/uploads/2016/11/Animated-GIF-Banana.gif" alt="Interactive GIF">
+                </div>
+                <p class="mt-4">
+                    Our PDF Signature App is designed to make document management simple and secure. Whether you need to sign documents for business purposes or verify the authenticity of received files, our app provides a comprehensive solution. With features like digital
+                    signatures, verification checks, and a user-friendly interface, you can handle all your PDF signing needs with ease.
+                </p>
+                <p>
+                    Explore our features to enhance your document security:
+                </p>
+                <a href="{{ url_for('sign') }}" class="btn btn-custom">Sign a PDF</a>
+                <a href="{{ url_for('verify') }}" class="btn btn-custom ml-2">Verify a PDF</a>
+                <div class="additional-images">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCnoxnufWEVEbp_7ehAYKyMDlgccHFFVKNnQ&s" alt="Feature 1">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlSnxUvz9-U6i8pam59DStrDbmFcOcdjiISQ&s" alt="Feature 2">
+                </div>
+                <ul class="list-unstyled">
+                    <li><strong>Digital Signatures:</strong> Apply secure digital signatures to your documents.</li>
+                    <li><strong>Verification Checks:</strong> Verify signatures to ensure document integrity.</li>
+                    <li><strong>User-Friendly Interface:</strong> Navigate effortlessly through our intuitive design.</li>
+                </ul>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
 
     <!-- Toast notification -->
     <div id="loginToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
@@ -53,7 +146,7 @@
             </button>
         </div>
         <div class="toast-body">
-            Invalid username or password.
+            Invalid username or password. Please try again or contact support if the issue persists.
         </div>
     </div>
 

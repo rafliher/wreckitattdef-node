@@ -16,13 +16,14 @@ from ecdsa import NIST256p
 curve = NIST256p
 order = int(curve.order)
 
-url = 'http://localhost:5111'
+# url = 'http://localhost:5111'
+url = 'http://13.250.57.255:11000'
 
 # checking Login
 def login(userData):
     sess = requests.Session()
     r = sess.post(url+'/login', data=userData, timeout=5)
-    assert 'Welcome to PDF Signature App'.lower() in r.text.lower()
+    assert 'Welcome to'.lower() in r.text.lower()
     return sess
 
 # sending pdf

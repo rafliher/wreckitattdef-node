@@ -21,6 +21,27 @@
         
         .card {
             margin: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-body {
+            text-align: center;
+        }
+        
+        .result-image {
+            max-width: 300px;
+            max-height: 300px;
+            margin: 20px 0;
+        }
+        
+        .btn-custom {
+            background-color: #004080;
+            color: #ffffff;
+        }
+        
+        .btn-custom:hover {
+            background-color: #003366;
         }
         
         .toast {
@@ -28,6 +49,15 @@
             top: 20px;
             right: 20px;
             z-index: 1050;
+        }
+        
+        .toast-header {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .toast-body {
+            color: #721c24;
         }
     </style>
 </head>
@@ -39,10 +69,14 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Verification Result</h5>
-                <p class="card-text">
-                    The signature is {{ 'valid' if is_valid else 'invalid' }}.
-                </p>
-                <a href="{{ url_for('verify') }}" class="btn btn-primary">Go Back</a>
+                {% if is_valid %}
+                <img src="https://kompak.or.id/wp-content/uploads/2024/01/A1-Valid-Artinya-Dalam-Kepolisian-Bahasa-Gaul.jpg" alt="Valid Signature" class="result-image">
+                <p class="card-text text-success">The signature is <strong>valid</strong>.</p>
+                {% else %}
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRupVYejUUjYB61R0y1c8NnA18NgBkuv8pz0A&s" alt="Invalid Signature" class="result-image">
+                <p class="card-text text-danger">The signature is <strong>invalid</strong>.</p>
+                {% endif %}
+                <a href="{{ url_for('verify') }}" class="btn btn-custom">Go Back</a>
             </div>
         </div>
     </div>
