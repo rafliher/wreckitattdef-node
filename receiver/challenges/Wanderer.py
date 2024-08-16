@@ -39,9 +39,9 @@ class Naraka(Challenge):
             
             assert host_flag == container_flag, 'Flag mismatch between host and container'
 
-            self.logger.info('Check passed for naraka')
+            self.logger.info('Check passed for wanderer')
             return True
 
         except Exception as e:
-            self.logger.error(f'Could not check naraka: {e}')
+            self.logger.error(f'Could not check wanderer: {e}')
             return False
