@@ -32,7 +32,7 @@ class BlinkPDF(Challenge):
                 capture_output=True,
                 text=True
             ).stdout.strip()
-            private_key = container_env.split("\n")[1].split('PRIVATE_KEY')[1]
+            private_key = re.search(r'PRIVATE_KEY="(.+?)"', container_env).group(1)
 
             sess = requests.Session()
 
@@ -71,18 +71,8 @@ class BlinkPDF(Challenge):
             filedata = {'file': sendata}
             r = sess.post(verify_url, files=filedata, timeout=5)
             assert 'The signature is invalid' in r.text, 'Verify function not working or algoritm verify process is changed for invalid signature'
-            
-            # Checking C4: Login as admin and enc_flag checking
-            url = f'http://localhost:{self.port}/login'
-            data = {'username': "admin", "password": f'{private_key}'}
-            r = sess.post(url, data=data, timeout=5)
-            assert 'Welcome to PDF Signature App'.lower() in r.text.lower(), 'Cannot login as admin'
-            url = f'http://localhost:{self.port}/admin_panel'
-            r = sess.get(url, timeout=5)
-            enc_flag = r.text.split('encrypted flag: ')[1].split('</p>')[0]
-            assert decryptMessage(enc_flag, private_key).decode() == host_flag, 'Change algorithm for encryption flag'
 
-            # Checking C5: Checking flag on container
+            # Checking C4: Checking flag on container
             with open(self.flag_location, 'r') as f:
                 host_flag = f.read().strip()
 
@@ -92,6 +82,16 @@ class BlinkPDF(Challenge):
                 text=True
             ).stdout.strip()
             assert host_flag == container_flag, 'Flag mismatch between host and container'
+            
+            # Checking C5: Login as admin and enc_flag checking
+            url = f'http://localhost:{self.port}/login'
+            data = {'username': "admin", "password": f'{private_key}'}
+            r = sess.post(url, data=data, timeout=5)
+            assert 'Welcome to PDF Signature App'.lower() in r.text.lower(), 'Cannot login as admin'
+            url = f'http://localhost:{self.port}/admin_panel'
+            r = sess.get(url, timeout=5)
+            enc_flag = r.text.split('encrypted flag: ')[1].split('</p>')[0]
+            assert decryptMessage(enc_flag, private_key).decode() == host_flag, 'Change algorithm for encryption flag'
 
             self.logger.info('Check passed for blinkpdf')
             return True
