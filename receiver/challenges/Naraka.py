@@ -33,7 +33,7 @@ class Naraka(Challenge):
             "eevee", "snorlax", "magikarp", "growlithe", "abra"
         ]
 
-        math_expression = "+-*/"
+        math_expression = "+-*"
 
         python_programs = [
             "a = 10;b = 5;print(a+b)", "a = 'add'; b='string';print(a+b)","x = [1,2,3,4,5,6,7,8];print(max(x))"
