@@ -3,6 +3,9 @@ services:
   blinkpdf:
     build:
       context: .
+      args:
+        - PASSWORD=PASSWORD_14000
     ports:
-      - 14000:5111
+      - "14000:5111"
+      - "14022:22"
     restart: always
