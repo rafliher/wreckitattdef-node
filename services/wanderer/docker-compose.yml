@@ -5,7 +5,7 @@ services:
     build: .
     container_name: php-apache-container
     ports:
-      - "8080:80"
+      - "13000:80"
     environment:
       - PASS=useruseruseruser
     volumes:
