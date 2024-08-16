@@ -2,7 +2,7 @@ FROM python:3.10-slim-buster
 
 ARG PASSWORD
 
-RUN apt-get update && apt-get install -y nano
+RUN apt-get update && apt-get install -y nano openssh-server
 
 # Create ctfuser and set password
 RUN useradd -m -d /app ctfuser && echo ctfuser:${PASSWORD} | chpasswd
