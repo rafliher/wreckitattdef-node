@@ -6,7 +6,7 @@ import random
 import subprocess
 import requests
 
-class Naraka(Challenge):
+class Wanderer(Challenge):
     flag_location = 'flags/wanderer.txt'
     history_location = 'history/wanderer.txt'
 
