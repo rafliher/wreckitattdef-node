@@ -1,24 +1,36 @@
 FROM python:3.10-slim-buster
 
-RUN apt-get update
-RUN apt-get install -y nano
-RUN apt-get install -y pkg-config
+ARG PASSWORD
 
 WORKDIR /opt
-COPY ./src .
+
+RUN apt-get update && \
+    apt-get install -y nano openssh-server \
+    gcc curl 
+
+# Create ctfuser and set password
+RUN useradd -m -d /opt ctfuser && echo ctfuser:${PASSWORD} | chpasswd
+
+# Restrict ctfuser access to only the working directory
+RUN chown -R ctfuser:ctfuser /opt && \
+    chmod 700 /opt
+
+# Configure SSH for ctfuser
+RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
+    echo "PermitRootLogin no" >> /etc/ssh/sshd_config && \
+    echo "AllowUsers ctfuser" >> /etc/ssh/sshd_config
+
+# Start SSH service
+RUN ssh-keygen -A
+RUN mkdir -p /run/sshd && chmod 755 /run/sshd
+
+COPY src/ .
+RUN touch /flag.txt
 
 RUN pip install --no-cache-dir -r requirements.txt
+RUN chmod +x ./main.sh
 
-# RUN python -u ./app.py
+CMD service ssh start && ./main.sh
 
-# COPY ./flag.txt /flag.txt
-
-# COPY ./main.sh /main.sh
-
-# RUN chmod +x /main.sh
-
-<<<<<<< HEAD
-# CMD ["/main.sh"]
-=======
-CMD service ssh start && /main.sh
->>>>>>> bf2ec842703d4857cf6052d02a8d44aa70a5aa8d
+EXPOSE 5111
+EXPOSE 22

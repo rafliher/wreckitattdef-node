@@ -1,8 +1,15 @@
-version: '3'
+version: "3"
+
 services:
   blinkpdf:
-    build:
-      context: .
-    ports:
-      - 14000:5111
     restart: always
+    container_name: blinkpdf
+    build:
+      context: ./
+      args:
+        - PASSWORD=PASSWORD_14000
+    ports:
+      - "14000:5111"
+      - "14022:22"
+    volumes:
+      - ./flag.txt:/flag.txt:ro
