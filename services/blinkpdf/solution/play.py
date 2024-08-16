@@ -18,7 +18,7 @@ B = 2**2048
 mat = matrix([
     [Integer(1),0,0,0,a*B,a1*B],
     [0,Integer(1),0,0,b*B,b1*B],
-    [0,0,Integer(1)*(2**1512),0,-p*B, -p1*B],
+    [0,0,Integer(1)*(2**2045),0,-p*B, -p1*B],
     [0,0,0,Integer(1),Integer(n)*B, Integer(n)*B],
 ])
 

@@ -18,7 +18,6 @@ def createSecretKey():
     return SECRET_KEY, PRIVATE_KEY
 
 if __name__ == '__main__':
-
     reset()
     SECRET_KEY, PRIVATE_KEY = createSecretKey()
     register("admin",f'{PRIVATE_KEY}',True)

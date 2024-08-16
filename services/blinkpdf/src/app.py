@@ -7,8 +7,8 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 import hashlib
 
-FLAG = open("flag.txt","rb").read()
-# FLAG = open("/flag.txt","rb").read()
+# FLAG = open("flag.txt","rb").read()
+FLAG = open("/flag.txt","rb").read()
 
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
