@@ -27,13 +27,6 @@ RUN mkdir -p /run/sshd && chmod 755 /run/sshd
 COPY src/ .
 RUN touch /flag.txt
 
-<<<<<<< HEAD
-RUN pip install --no-cache-dir -r requirements.txt
-RUN chmod +x ./main.sh
-
-CMD service ssh start && ./main.sh
-
-=======
 COPY ./flag.txt /flag.txt
 
 COPY ./main.sh main.sh
@@ -43,6 +36,5 @@ RUN chmod +x ./main.sh
 
 CMD service ssh start && ./main.sh
 
->>>>>>> bbc270d2a5d09f27ba1f3231ac59d3750ccbe340
-EXPOSE 5111
-EXPOSE 22
+# EXPOSE 5111
+# EXPOSE 22

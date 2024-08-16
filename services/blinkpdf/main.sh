@@ -1,8 +1,5 @@
 #!/bin/bash
 /usr/sbin/sshd -D
 
-# exec python -u /opt/init.py
-
-sleep 2
-
-exec python -u /opt/app.py 
+python3 -u /opt/init.py
+python3 -u /opt/app.py 

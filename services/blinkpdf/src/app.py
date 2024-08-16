@@ -114,4 +114,4 @@ def verify():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5111)
+    app.run(debug=False,port="5111",host="0.0.0.0")
