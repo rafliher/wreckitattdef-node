@@ -58,7 +58,7 @@ class Wanderer(Challenge):
                 'data': '<h1>Test Content</h1>'
             }
             response = session.post(edit_url_html, data=edit_data)
-            assert "Edit Success" in response.text, 'Edit failed'
+            assert "Edit Success" in response.text, 'Edit HTML failed'
 
             # Verify the content was saved correctly
             response = session.get(view_page_url)
