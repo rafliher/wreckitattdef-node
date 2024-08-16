@@ -50,18 +50,18 @@ class Wanderer(Challenge):
 
             # Step 4: Check Edit HTML Functionality
             edit_url_html = f'http://localhost:{self.port}/index.php?module=user&action=edit&type=html'
-            response = self.session.get(edit_url_html)
+            response = session.get(edit_url_html)
             assert response.status_code == 200, 'Edit page not accessible'
             # Simulate submitting the edit form
             edit_data = {
                 'type': 'html',
                 'data': '<h1>Test Content</h1>'
             }
-            response = self.session.post(edit_url_html, data=edit_data)
+            response = session.post(edit_url_html, data=edit_data)
             assert "Edit Success" in response.text, 'Edit failed'
 
             # Verify the content was saved correctly
-            response = self.session.get(view_page_url)
+            response = session.get(view_page_url)
             assert '<h1>CONTOH!!!</h1>' in response.text, 'Edited content was not saved correctly'
 
             # Step 5: Check Edit JS Functionality
@@ -73,12 +73,12 @@ class Wanderer(Challenge):
                 'type': 'js',
                 'data': 'console.log("CONTOH!!");'
             }
-            response = self.session.post(edit_url, data=edit_data)
+            response = session.post(edit_url, data=edit_data)
             assert "Edit Success" in response.text, 'Edit failed'
 
             # Step 6: Check Edit CSS Functionality
             edit_url_css = f'http://localhost:{self.port}/index.php?module=user&action=edit&type=css'
-            response = self.session.get(edit_url_css)
+            response = session.get(edit_url_css)
             assert response.status_code == 200, 'Edit page not accessible'
             # Simulate submitting the edit form
             edit_data = {
