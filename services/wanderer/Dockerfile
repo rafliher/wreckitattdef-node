@@ -23,5 +23,7 @@ RUN chown -R ctfuser:ctfuser /var/www/html/
 RUN chown -R www-data:www-data /var/www/html/user
 RUN chmod -R 740 /var/www/html/user
 
-CMD service ssh start
-CMD /usr/sbin/sshd -D
+COPY start.sh .
+RUN chmod +x start.sh
+
+CMD service ssh start && ./start.sh

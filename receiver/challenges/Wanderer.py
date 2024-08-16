@@ -27,21 +27,22 @@ class Wanderer(Challenge):
 
     def check(self):
         try:
+            session = requests.Session()
             # Step 1: Check Register
             url = f'http://localhost:{self.port}/index.php?module=user&action=register'
             data = {'username': 'adminwreckitchecker','password': 'adminwreckitchecker'}
-            response = self.session.post(self.register_url, data=registration_data)
+            response = session.post(self.register_url, data=registration_data)
             assert "username already exists" in response.text or "Registration Success" in response.text or response.status_code == 200 , 'Function Register Failed'
 
             # Step 2: Check Login
             url = f'http://localhost:{self.port}/index.php?module=user&action=login'
             login_data = {'username': 'adminwreckitchecker', 'password': 'adminwreckitchecker'}
-            response = self.session.post(url, data=login_data)
+            response = session.post(url, data=login_data)
             assert "Login Success" in response.text or response.status_code == 200, 'Login function failed'
 
             # Step 3: Check UUID Not hidden
             view_page_url = f'http://localhost:{self.port}/index.php?module=page&action=viewPage'
-            response = self.session.get(view_page_url)
+            response = session.get(view_page_url)
             uuid_pattern = re.compile(r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}')
             found_uuids = uuid_pattern.findall(response.text)
             assert found_uuids, 'UUID not found'
