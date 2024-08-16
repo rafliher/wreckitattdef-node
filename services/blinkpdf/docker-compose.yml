@@ -1,10 +1,8 @@
 version: '3'
 services:
   blinkpdf:
-    restart: always
     build:
       context: .
-      args:
-          - FLAG={FLAG}
     ports:
-      - "11000:5111"
+      - 14000:5111
+    restart: always
