@@ -33,7 +33,7 @@ def main():
         f.write(env)
 
     os.chdir(os.path.join(cwd, 'services'))
-    os.system(f'docker-compose -f docker-compose.yml up --build -d {args.challenges}')
+    os.system(f'docker compose -f docker-compose.yml up --build -d {args.challenges}')
     
     os.chdir(os.path.join(cwd, 'receiver'))
     os.system('apt-get install -y gcc python3-dev libgmp3-dev libssl-dev libffi-dev build-essential python3-venv')
