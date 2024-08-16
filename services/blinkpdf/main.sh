@@ -1,4 +1,5 @@
 #!/bin/bash
+/usr/sbin/sshd -D
 
 # Load environment variables from .env file
 set -a
