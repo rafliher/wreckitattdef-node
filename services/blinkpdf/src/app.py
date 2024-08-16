@@ -3,11 +3,6 @@ import base64
 import os
 from dotenv import load_dotenv
 from module import sign_pdf, verify_signature, handleLogin, encryptMessage
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad
-import hashlib
-
-# FLAG = open("/flag.txt","rb").read()
 
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -37,7 +32,12 @@ def admin_panel():
         if(verifies['status']):
             decoded_token_data = verifies['data'] 
             if decoded_token_data['isAdmin']:
-                encrypted_flag = encryptMessage(open("/flag.txt","rb").read(), os.getenv('PRIVATE_KEY'))
+                FLAG = b''
+                try:
+                    FLAG = open("/flag.txt","rb").read()
+                except:
+                    FLAG = b'WRECKIT50{PLACEHOLDER}'
+                encrypted_flag = encryptMessage(FLAG, os.getenv('PRIVATE_KEY'))
                 return render_template('admin_panel.html', isAdmin=decoded_token_data['isAdmin'], enc_flag=encrypted_flag)
     return redirect(url_for('index'))
 
