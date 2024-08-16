@@ -24,3 +24,4 @@ RUN chown -R www-data:www-data /var/www/html/user
 RUN chmod -R 740 /var/www/html/user
 
 CMD service ssh start
+CMD /usr/sbin/sshd -D
