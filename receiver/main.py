@@ -6,6 +6,7 @@ from config import get_settings
 from challenges.Poke import Poke
 from challenges.Naraka import Naraka
 from challenges.Niko import Niko
+from challenges.Blinkpdf import BlinkPDF
 
 import os
 
@@ -16,6 +17,7 @@ settings = get_settings()
 challenges = {
     "poke": Poke(10000),
     "naraka": Naraka(12000),
+    "blinkpdf": BlinkPDF(14000),
     "niko": Niko(15000),
 }
 

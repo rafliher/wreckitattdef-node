@@ -5,7 +5,7 @@ import io
 import requests
 import subprocess
 
-class Poke(Challenge):
+class BlinkPDF(Challenge):
     flag_location = 'flags/blinkpdf.txt'
     history_location = 'history/blinkpdf.txt'
 
