@@ -5,6 +5,7 @@ import requests
 import random
 import subprocess
 import requests
+import re
 
 class Naraka(Challenge):
     flag_location = 'flags/naraka.txt'
@@ -64,7 +65,21 @@ class Naraka(Challenge):
             r = requests.post(url, data=data, timeout=5)
             assert pythonresult in r.text, 'My code line is not execute :('
 
-            # Step 4: Check flag
+            # Step 4: Check execute FLAG declaration execute
+            url = f'http://localhost:{self.port}/sourcecode/1'
+            r = requests.get(url, timeout=5)
+            flag_assignments = re.findall(r'^\s*FLAG\s*=\s*sys\.argv\[2\]\s*$', r.text, re.MULTILINE)
+            flag_assignments_num =  flag_assignments = re.findall(r'^\s*FLAG\s*=\s*.+$', r.text, re.MULTILINE)
+            assert flag_assignments != 1 or flag_assignments_num != 1, "execute FLAG declared incorrectly"
+
+            # Step 5: Check evaluate FLAG declaration execute
+            url = f'http://localhost:{self.port}/sourcecode/1'
+            r = requests.get(url, timeout=5)
+            flag_assignments = re.findall(r'^\s*FLAG\s*=\s*sys\.argv\[2\]\s*$', r.text, re.MULTILINE)
+            flag_assignments_num =  flag_assignments = re.findall(r'^\s*FLAG\s*=\s*.+$', r.text, re.MULTILINE)
+            assert flag_assignments != 1 or flag_assignments_num != 1, "evaluate FLAG declared incorrectly"
+
+            # Step 6: Check flag
             with open(self.flag_location, 'r') as f:
                 host_flag = f.read().strip()
 

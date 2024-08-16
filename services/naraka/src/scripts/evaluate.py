@@ -2,6 +2,7 @@ import sys
 import string
 BLACKLIST  ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 # BLACKLIST = ""
+# You cannot change the value of FLAG, FLAG can only be filled with sys.argv[2]
 FLAG = sys.argv[2]
 
 
