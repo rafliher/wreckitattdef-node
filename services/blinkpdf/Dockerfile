@@ -17,4 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # RUN chmod +x /main.sh
 
+<<<<<<< HEAD
 # CMD ["/main.sh"]
+=======
+CMD service ssh start && /main.sh
+>>>>>>> bf2ec842703d4857cf6052d02a8d44aa70a5aa8d

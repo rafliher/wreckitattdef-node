@@ -21,16 +21,17 @@ def chall():
         challindex = request.form['chall']
         if challindex != '1' and challindex != '2':
                 return render_template("index.html", result="")
-        try:
-            userinput = request.form['input']
-        except Exception as e:
-            return render_template("chall.html", challindex = challindex, result = "")
         if challindex == '1':
                 script = "scripts/execute.py"
                 desc = "It will execute every single line code: a = 5;b = 4;print(a+b), x = 23;y = 23;print(x==y), etc"
         elif challindex == '2':
                 script = "scripts/evaluate.py"
                 desc = "It will calculate your sins: 1+1, 2*2, etc"
+        try:
+            userinput = request.form['input']
+        except Exception as e:
+            return render_template("chall.html", challindex = challindex, result = "", desc=desc)
+        
         if(userinput != ""):
             try:
                 print("userinput",userinput)
