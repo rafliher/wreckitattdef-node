@@ -41,7 +41,7 @@ class BlinkPDF(Challenge):
             url = f'http://localhost:{self.port}/login'
             data = {'username': "user", "password": "user"}
             r = sess.post(url, data=data, timeout=5)
-            assert 'Welcome to PDF Signature App'.lower() in r.text.lower(), 'Cannot login as user'
+            assert 'Welcome to the PDF Signature App'.lower() in r.text.lower(), 'Cannot login as user'
 
             pdfpath = 'files/blinkpdf_hellodocs.pdf'
             pdfbytes = open(pdfpath, 'rb').read()
