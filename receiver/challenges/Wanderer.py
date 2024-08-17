@@ -60,7 +60,7 @@ class Wanderer(Challenge):
 
             # Step 6: Check Edit JS Functionality
             edit_url_js = f'http://localhost:{self.port}/index.php?module=user&action=edit&type=js'
-            response = self.session.get(edit_url_js)
+            response = session.get(edit_url_js)
             assert response.status_code == 200, 'Edit js page not accessible'
 
             # Step 7: Check Edit CSS Functionality
