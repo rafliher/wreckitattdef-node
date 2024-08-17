@@ -21,10 +21,9 @@ def check():
         url = 'http://54.255.182.220:11000/login'
         data = {"username": "user", "password": "user"}
         r = sess.post(url, data=data, timeout=5)
-        print(r.text[4000:6000])
         assert 'Welcome to the PDF Signature App'.lower() in r.text.lower(), 'Cannot login as user'
 
-        pdfpath = './files/blinkpdf_hellodocs.pdf'
+        pdfpath = 'receiver/files/blinkpdf_hellodocs.pdf'
         pdfbytes = open(pdfpath, 'rb').read()
 
         # Checking C2: Sign pdf as user
@@ -45,25 +44,26 @@ def check():
         sendata = ('main_signed.pdf', signed_pdf_stream, 'application/pdf')
         filedata = {'file': sendata}
         r = sess.post(verify_url, files=filedata, timeout=5)
-        assert 'The signature is valid' in r.text, 'Verify function not working or algoritm verify process is changed'
+        assert 'The signature is <strong>valid</strong>.' in r.text, 'Verify function not working or algoritm verify process is changed'
         
         # Checking C3: Verify invalid pdf as user
         verify_url = f'http://54.255.182.220:11000/verify'
         sendata = ('main_signed.pdf', pdfbytes, 'application/pdf')
         filedata = {'file': sendata}
         r = sess.post(verify_url, files=filedata, timeout=5)
-        assert 'The signature is invalid' in r.text, 'Verify function not working or algoritm verify process is changed for invalid signature'
+        assert 'The signature is <strong>invalid' in r.text, 'Verify function not working or algoritm verify process is changed for invalid signature'
 
-        host_flag = 'WreckIT50{5QU46S0ApslDsi8ogZxVi9td4VzKehjXbBzORi31Ua7P2P0yyKcs59ufDpd73Mzv}'
+        host_flag = 'WreckIT50{VG09vN5bKo0cWHltUxNqegByVQjv7u7znjDRih1bhFn9zMt1V0USxQLyONOcbiLS}'
         
         # Checking C5: Login as admin and enc_flag checking
         url = f'http://54.255.182.220:11000/login'
         data = {'username': "admin", "password": f'{private_key}'}
         r = sess.post(url, data=data, timeout=5)
-        assert 'Welcome to PDF Signature App'.lower() in r.text.lower(), 'Cannot login as admin'
+        assert 'Welcome to the PDF Signature App'.lower() in r.text.lower(), 'Cannot login as admin'
         url = f'http://54.255.182.220:11000/admin_panel'
         r = sess.get(url, timeout=5)
         enc_flag = r.text.split('encrypted flag: ')[1].split('</p>')[0]
+        print(decryptMessage(enc_flag, private_key))
         assert decryptMessage(enc_flag, private_key).decode() == host_flag, 'Change algorithm for encryption flag'
 
         print('Check passed for blinkpdf')
