@@ -47,8 +47,28 @@ class Wanderer(Challenge):
             uuid_pattern = re.compile(r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}')
             found_uuids = uuid_pattern.findall(response.text)
             assert found_uuids, 'UUID not found'
+
+            # Step 4: Check create sample page
+            sample_page_url = f'http://localhost:{self.port}/index.php?module=page&action=samplePage'
+            response = session.get(sample_page_url)
+            assert "Create Success" in response.text or response.status_code == 200, 'Create Sample Failed'
+
+            # Step 5: Check Edit HTML Functionality
+            edit_url_html = f'http://localhost:{self.port}/index.php?module=user&action=edit&type=html'
+            response = session.get(edit_url_html)
+            assert response.status_code == 200, 'Edit html page not accessible'
+
+            # Step 6: Check Edit JS Functionality
+            edit_url_js = f'http://localhost:{self.port}/index.php?module=user&action=edit&type=js'
+            response = session.get(edit_url_js)
+            assert response.status_code == 200, 'Edit js page not accessible'
+
+            # Step 7: Check Edit CSS Functionality
+            edit_url_css = f'http://localhost:{self.port}/index.php?module=user&action=edit&type=css'
+            response = session.get(edit_url_css)
+            assert response.status_code == 200, 'Edit css page not accessible'
             
-            # Step 4: Check flag
+            # Step 8: Check flag
             with open(self.flag_location, 'r') as f:
                 host_flag = f.read().strip()
 

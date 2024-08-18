@@ -1,27 +1,97 @@
 <!-- menubar.html -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="#">Blink_P!D#F</a>
-    <div class="collapse navbar-collapse">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+        <span class="storm-icon">&#9889;</span> Blink_P!D#F
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('index') }}">Boarding</a>
+                <a class="nav-link storm-button" href="{{ url_for('index') }}">Boarding</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('sign') }}">Blink</a>
+                <a class="nav-link storm-button" href="{{ url_for('sign') }}">Blink</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('verify') }}">Verifiez</a>
+                <a class="nav-link storm-button" href="{{ url_for('verify') }}">Verifiez</a>
             </li>
             {% if isAdmin %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin_panel') }}">Those'Admin?</a>
+                <a class="nav-link storm-button" href="{{ url_for('admin_panel') }}">Those'Admin?</a>
             </li>
             {% endif %}
         </ul>
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('logout')}}">Pulang</a>
+                <a class="nav-link storm-button" href="{{ url_for('logout') }}">Pulang</a>
             </li>
         </ul>
     </div>
 </nav>
+
+<!-- Add this CSS inside <style> tags in the <head> of your HTML or in a separate CSS file -->
+<style>
+    .storm-icon {
+        font-size: 1.5rem;
+        color: #ffcc00;
+        animation: lightning 1.5s infinite;
+    }
+    
+    @keyframes lightning {
+        0%,
+        100% {
+            text-shadow: 0 0 5px #ffcc00, 0 0 10px #ffcc00, 0 0 15px #ffcc00;
+        }
+        50% {
+            text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00, 0 0 30px #ffcc00;
+        }
+    }
+    
+    .storm-button {
+        position: relative;
+        padding: 0.5rem 1rem;
+        transition: color 0.3s, background-color 0.3s;
+        overflow: hidden;
+        border-radius: 0.25rem;
+    }
+    
+    .storm-button::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 300%;
+        height: 300%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: width 0.3s, height 0.3s, top 0.3s, left 0.3s;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+        opacity: 0;
+    }
+    
+    .storm-button:hover::before {
+        width: 400%;
+        height: 400%;
+        top: -50%;
+        left: -50%;
+        opacity: 1;
+    }
+    
+    .storm-button:hover {
+        color: #ffffff;
+        background-color: #004080;
+    }
+    
+    .navbar-nav .nav-link {
+        color: #ffffff;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .navbar-nav .nav-link:hover {
+        color: #ffcc00;
+    }
+</style>

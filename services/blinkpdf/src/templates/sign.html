@@ -4,15 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign PDF</title>
+    <title>Blink_P!D#F</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #f0f8ff;
+            background-color: #e0f7fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         
         .navbar {
-            background-color: #004080;
+            background-color: #00796b;
         }
         
         .navbar-nav a {
@@ -21,13 +24,86 @@
         
         .card {
             margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .btn-primary {
+            background-color: #00796b;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #004d40;
         }
         
         .toast {
-            position: absolute;
-            top: 20px;
+            position: fixed;
+            bottom: 20px;
             right: 20px;
             z-index: 1050;
+        }
+        
+        .description-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        
+        .gif-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .gif-container img {
+            max-width: 150px;
+            height: auto;
+        }
+        
+        .custom-description {
+            margin: 20px 0;
+        }
+        
+        .chatbot-gif {
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+        }
+        
+        .verify-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 20px 0;
+        }
+        
+        .verify-content {
+            flex: 3;
+            margin-right: 20px;
+        }
+        
+        .verify-form {
+            flex: 2;
+        }
+        
+        .footer {
+            background-color: #00796b;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
@@ -35,9 +111,33 @@
 <body>
     {% include 'menubar.html' %}
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
+    <div class="container flex-grow-1">
+        <div class="verify-container">
+            <!-- Content on the left -->
+            <div class="verify-content">
+                <div class="custom-description">
+                    <h4>How It Works</h4>
+                    <p>Upload your PDF file using the form on the right. Our system will then apply a digital signature to your document. This ensures the authenticity and integrity of your PDF, providing you with a secure and verifiable document.</p>
+                </div>
+
+                <div class="gif-container">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/0792a275536851.5c4fa1ce7f309.gif" alt="Signature Animation" class="img-fluid">
+                </div>
+
+                <div class="custom-description">
+                    <h4>Why Sign Your PDF?</h4>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbJAS-3yVU30xEf7HBG_SZ4NAAHc4VeebXwQ&s" alt="Secure Documents" class="description-img">
+                    <p>Adding a digital signature to your PDF ensures that the document is genuine and has not been altered. It provides a higher level of security and confidence to recipients about the authenticity of the document.</p>
+                </div>
+            </div>
+
+            <!-- Chatbot GIF on the right side -->
+            <div class="text-center mt-4">
+                <img src="https://www.aalpha.net/wp-content/uploads/2020/11/ChatBot_ace-1.gif" alt="Chatbot Animation" class="chatbot-gif">
+            </div>
+
+            <!-- Verification Form on the right -->
+            <div class="verify-form">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Sign PDF</h5>
@@ -50,9 +150,17 @@
                         </form>
                     </div>
                 </div>
+                <div class="video-container" style="padding-top:100px">
+                    <h3>Bosen mending youtube lah:</h3>
+                    <iframe src="https://www.youtube.com/embed/zCKQkhmW8co" title="YouTube video player" allowfullscreen></iframe>
+                </div>
             </div>
         </div>
+
     </div>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
 
     <!-- Toast notification -->
     <div id="loginToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
@@ -72,8 +180,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        // Display the toast if there's an error message in the query string
         $(document).ready(function() {
+            // Display the toast if there's an error message in the query string
             const urlParams = new URLSearchParams(window.location.search);
             const error = urlParams.get('error');
             if (error) {

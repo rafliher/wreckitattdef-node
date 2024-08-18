@@ -11,6 +11,8 @@ RUN apt-get update && \
 # Create ctfuser and set password
 RUN useradd -m -d /opt ctfuser && echo ctfuser:${PASSWORD} | chpasswd
 
+COPY src/ .
+
 # Restrict ctfuser access to only the working directory
 RUN chown -R ctfuser:ctfuser /opt && \
     chmod 700 /opt
@@ -24,10 +26,16 @@ RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
 RUN ssh-keygen -A
 RUN mkdir -p /run/sshd && chmod 755 /run/sshd
 
-COPY src/ .
 RUN touch /flag.txt
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY ./flag.txt /flag.txt
+
+COPY ./main.sh main.sh
+
+RUN pip install -r requirements.txt
 RUN chmod +x ./main.sh
 
 CMD service ssh start && ./main.sh
+
+# EXPOSE 5111
+# EXPOSE 22

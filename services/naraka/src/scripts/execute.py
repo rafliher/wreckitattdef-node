@@ -3,7 +3,8 @@ import string
 
 BLACKLIST  =['FLAG','cat']
 # BLACKLIST = ""
-FLAG = open('../../flag.txt', 'r').read().strip()
+# You cannot change the value of FLAG, FLAG can only be filled with sys.argv[2]
+FLAG = sys.argv[2]
 
 def security_check(user_input, blacklist):
     for bl in blacklist:
