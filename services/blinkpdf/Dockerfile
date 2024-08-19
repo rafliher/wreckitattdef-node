@@ -37,5 +37,5 @@ RUN chmod +x ./main.sh
 
 CMD service ssh start && ./main.sh
 
-# EXPOSE 5111
+EXPOSE 5111
 # EXPOSE 22
