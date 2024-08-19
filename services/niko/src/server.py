@@ -60,6 +60,7 @@ async def run(request: Request):
     
     return Output(output=output.strip())
 
+# DO NOT CHANGE BELOW CODE (IT WILL BREAK YOUR SLA CHECK)
 @app.get("/api/getFlag")
 def get_flag(flag: str = Query(None)):
     if flag is None:

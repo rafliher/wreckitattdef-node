@@ -52,26 +52,38 @@ class Niko(Challenge):
             assert host_flag == container_flag, 'Flag mismatch between host and container'
             
             self.logger.info('Flag check passed for niko')
+
+            # Step 2: Check if can access flag
+            container_key = subprocess.run(
+                ["docker", "exec", "niko_container", "cat", "/opt/flag"],
+                capture_output=True,
+                text=True
+            ).stdout.strip()   
+            urlFlag = f'http://localhost:{self.port}/api/getFlag?flag={container_key}'
+            expected_output = container_flag
+            response2 = requests.get(urlFlag)
+            assert response2.text.strip() == expected_output, 'Get Flag check does not work'
+            self.logger.info('Get flag endpoint check passed for niko')
             
-            # Step 2: Check if the webpage can be accessed
+            # Step 3: Check if the webpage can be accessed
             url = f'http://localhost:{self.port}/'
             response = requests.get(url)
             status_code = response.status_code
             assert status_code == 200, 'Webpage is not accessible'
             self.logger.info('Webpage accessibility check passed for niko')
 
-            # Step 3: Check if the output of the specific URL equals the expected string
+            # Step 4: Check if the output of the specific URL equals the expected string
             urlFlag = f'http://localhost:{self.port}/api/getFlag?flag=1'
             expected_output = "(⋟﹏⋞) 私をバカにしようとしているのか (´ ͡༎ຶ ͜ʖ ͡༎ຶ `)︵‿︵"
             response2 = requests.get(urlFlag)
             assert response2.text.strip() == expected_output, 'Webpage output does not match expected output'
             self.logger.info('Webpage output check passed for niko')
             
-            # Step 4: Check if the chat endpoint is working
+            # Step 5: Check if the chat endpoint is working
             urlChat = f'http://localhost:{self.port}/api/chat'
             data = 'test'
             response3 = requests.post(urlChat, data=data)
-            assert json.loads(response3.text.strip()).get("output", "No message found") in error_messages, 'Api endpoint is not accessible'
+            assert json.loads(response3.text.strip()).get("output") in error_messages, 'Api endpoint is not accessible'
             self.logger.info('Webpage delay check passed for niko')
             
             return True

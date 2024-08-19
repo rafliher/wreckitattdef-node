@@ -13,9 +13,18 @@ RUN useradd -m -d /opt ctfuser && echo ctfuser:${PASSWORD} | chpasswd
 
 COPY src/ .
 
-# Restrict ctfuser access to only the working directory
-RUN chown -R ctfuser:ctfuser /opt && \
-    chmod 700 /opt
+# Generate a random flag and write it to /opt/flag
+RUN python3 -c "import random; import string; flag = ''.join(random.choices(string.digits, k=8)); open('/opt/flag', 'w').write(flag)"
+
+# Change ownership of /opt and its contents to ctfuser
+RUN chown -R ctfuser:ctfuser /opt
+
+# Set restrictive permissions for the /opt directory and its contents
+RUN chmod 700 /opt && \
+    find /opt -type f -exec chmod 400 {} \;
+
+# Allow write permissions only for /opt/server.py for ctfuser
+RUN chmod 700 /opt/server.py
 
 # Configure SSH for ctfuser
 RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
@@ -28,11 +37,9 @@ RUN mkdir -p /run/sshd && chmod 755 /run/sshd
 
 RUN touch /flag.txt
 
-# Generate a random flag and write it to /opt/flag
-RUN python3 -c "import random; import string; flag = ''.join(random.choices(string.digits, k=8)); open('/opt/flag', 'w').write(flag)"
-
 RUN pip install -r requirements.txt
 RUN chmod +x ./start.sh
+RUN chmod +x ./niko
 
 CMD service ssh start && ./start.sh
 
