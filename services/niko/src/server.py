@@ -55,8 +55,8 @@ async def run(request: Request):
                 except subprocess.TimeoutExpired:
                     proc.kill()
                     output = "ああ、くそ、君は私を捕まえた。༼☯﹏☯༽"
-                except Exception as e:
-                    output = random.choice(error_messages)
+        except Exception as e:
+            output = random.choice(error_messages)
     
     return Output(output=output.strip())
 
