@@ -22,6 +22,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def index():
     return FileResponse("index.html")
 
+@app.get("/api/chat")
+def index():
+    return PlainTextResponse("/api/getFlag might be interesting")
+
 @app.post("/api/chat", response_model=Output)
 async def run(request: Request):
     msg = await request.body()
@@ -50,11 +54,9 @@ async def run(request: Request):
                         output = random.choice(error_messages)
                 except subprocess.TimeoutExpired:
                     proc.kill()
-                    output, error = proc.communicate()
-                    output = "コマンドがタイムアウトしました。༼☯﹏☯༽"
-
-        except Exception as e:
-            output = random.choice(error_messages)
+                    output = "ああ、くそ、君は私を捕まえた。༼☯﹏☯༽"
+                except Exception as e:
+                    output = random.choice(error_messages)
     
     return Output(output=output.strip())
 
