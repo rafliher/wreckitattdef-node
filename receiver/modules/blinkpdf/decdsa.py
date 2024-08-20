@@ -35,10 +35,10 @@ class DECDSA:
 
     def sign(self, message):
         m1, m2 = message[:len(message)//2], message[len(message)//2:]
-        h1 = hashlib.sha256(m1).hexdigest()[2:]
-        h2 = hashlib.sha256(m2).hexdigest()[2:]
-        z1 = int(h1, 16) % self.order
-        z2 = int(h2, 16) % self.order
+        h1 = hashlib.sha256(m1).digest()
+        h2 = hashlib.sha256(m2).digest()
+        z1 = int.from_bytes(h1, byteorder='big') % self.order
+        z2 = int.from_bytes(h2, byteorder='big') % self.order
         while True:
             k1 = random.randint(z1, z1*4)
             k2 = random.randint(z2, z2*4)
@@ -51,12 +51,9 @@ class DECDSA:
             # assert for checking valid points
             if(R_att_x!=(R1+R2).x() % self.order):
                 continue
-            
-            print(int(k1+k2).bit_length())
 
             if r1 == 0 or r2 == 0:
                 continue
-            
             ks = pow(k1, -1, self.order) + pow(k2, -1, self.order)
             s = (pow(k1*k2, -1, self.order) * (z1 + r1 * self.private_key + z2 + r2 * self.private_key) * pow(ks, -1, self.order)) % self.order
 
@@ -84,7 +81,10 @@ class DECDSA:
         R = u1 * self.generator + u3 * self.public_key + u2 * self.generator + u4 * self.public_key
         R_x = R.x() % self.order
         R_att_x = (self.lift_x(r1) + self.lift_x(r2)).x() % self.order
+        print(R_att_x)
+        print(R_x)
         return R_x == R_att_x
+    
     
     def long_to_bytes(self, x):
         return x.to_bytes(32, "big")
