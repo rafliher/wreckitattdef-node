@@ -94,9 +94,9 @@ class BlinkPDF(Challenge):
             url = f'http://localhost:{self.port}/admin_panel'
             r = sess.get(url, timeout=5)
             enc_flag = r.text.split('encrypted flag: ')[1].split('</p>')[0]
-            dec = decryptMessage(enc_flag, private_key)
-            assert dec[1].decode() == host_flag, 'Change algorithm for encryption flag'
-            assert dec[0] == True, 'Change signature algorithm for encryption flag'
+            cek, dec = decryptMessage(enc_flag, private_key)
+            assert dec.decode() == host_flag, 'Change algorithm for encryption flag'
+            assert cek == True, 'Change signature algorithm for encryption flag'
 
             self.logger.info('Check passed for blinkpdf')
             return True
