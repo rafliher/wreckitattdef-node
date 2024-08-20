@@ -40,8 +40,8 @@ class DECDSA:
         z1 = int(h1, 16) % self.order
         z2 = int(h2, 16) % self.order
         while True:
-            k1 = random.randint(z1, z1*2)
-            k2 = random.randint(z2, z2*2)
+            k1 = random.randint(z1, z1*4)
+            k2 = random.randint(z2, z2*4)
             R1 = k1 * self.generator
             R2 = k2 * self.generator
             r1 = R1.x() % self.order
@@ -52,10 +52,13 @@ class DECDSA:
             if(R_att_x!=(R1+R2).x() % self.order):
                 continue
             
+            print(int(k1+k2).bit_length())
+
             if r1 == 0 or r2 == 0:
                 continue
-
-            s = (pow(k1 + k2, -1, self.order) * (z1 + r1 * self.private_key + z2 + r2 * self.private_key)) % self.order
+            
+            ks = pow(k1, -1, self.order) + pow(k2, -1, self.order)
+            s = (pow(k1*k2, -1, self.order) * (z1 + r1 * self.private_key + z2 + r2 * self.private_key) * pow(ks, -1, self.order)) % self.order
 
             if s == 0:
                 continue

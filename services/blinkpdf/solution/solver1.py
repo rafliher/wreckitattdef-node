@@ -95,9 +95,6 @@ def biasedNonce(dataset, inc):
     m += [[0,0]+[0]*i+[order]+[0]*(inc-i-1) for i in range(inc)]
 
     Mat = matrix(m)
-    # W = Babai_closest_vector(Mat, Y)
-    # x = W[1] * (p-1) / 2
-    # print(x)
     for line in Mat.LLL():
         if(line[0]==order):
             key = Zn(line[1]*p/B)
@@ -107,7 +104,7 @@ def main(url):
     try:
         userData = {'username': "user", "password": "user"}
         session = login(userData, url)
-        inc = 60
+        inc = 70
         dataset = createDataset(session, inc, url)
         print("success generate dataset:",len(dataset))
         private = hex(int(biasedNonce(dataset, inc)))[2:]
@@ -118,8 +115,9 @@ def main(url):
     except:
         return None, None
 
-flag, private = main('http://localhost:5111')
-print(flag)
+for i in range(100):
+    flag, private = main('http://localhost:5111')
+    print(flag)
 
 # listu = [
 #     "http://47.129.153.66:11000",
