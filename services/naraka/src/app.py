@@ -22,10 +22,10 @@ def chall():
                 return render_template("index.html", result="")
         if challindex == '1':
                 script = "scripts/execute.py"
-                desc = "It will execute every single line code: a = 5;b = 4;print(a+b), x = 23;y = 23;print(x==y), etc"
+                desc = "It will execute every single line code (Math, Logical check, Concat String, Statistics): a = 5;b = 4;print(a+b), x = 23;y = 23;print(x==y), a = 'The'; b = 'demon'; print(a+b), x = [1,2,3,4,5,6,7,8];print(max(x)), etc"
         elif challindex == '2':
                 script = "scripts/evaluate.py"
-                desc = "It will calculate your sins: 1+1, 2*2, etc"
+                desc = "It will calculate your sins: 1+1, 2*2, 5-2, etc"
         try:
             userinput = request.form['input']
         except Exception as e:
@@ -57,7 +57,7 @@ def render():
             pass
         return render_template_string(template.replace("thisistemplate",request.args.get('name')))
     else:
-        return "Hello, send someting inside the param 'name'!"
+        return "Hello, please send me your 'name'"
 
 @app.route('/sourcecode/<challindex>', methods=['GET'])
 def sourcecode(challindex):
