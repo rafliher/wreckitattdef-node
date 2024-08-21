@@ -85,7 +85,7 @@ def createDataset(session, inc, url):
 
 # attack 
 def biasedNonce(dataset, inc):
-    B = 2**250
+    B = 2**251
     p = order
     Zn = Zmod(p)
 
@@ -116,7 +116,7 @@ def main(url):
         return None, None
 
 for i in range(100):
-    flag, private = main('http://localhost:5112')
+    flag, private = main('http://54.179.25.137:11000/')
     print(flag)
 
 # listu = [
