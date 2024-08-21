@@ -70,8 +70,8 @@ class DECDSA:
             return False
         
         m1, m2 = message[:len(message)//2], message[len(message)//2:]
-        h1 = hashlib.sha256(m1).digest()
-        h2 = hashlib.sha256(m2).digest()
+        h1 = hashlib.sha256(m1).digest()[1:]
+        h2 = hashlib.sha256(m2).digest()[1:]
         z1 = int.from_bytes(h1, byteorder='big') % self.order
         z2 = int.from_bytes(h2, byteorder='big') % self.order
         s_inv = pow(s, -1, self.order)
