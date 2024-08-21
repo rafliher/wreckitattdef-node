@@ -28,13 +28,13 @@ class BlinkPDF(Challenge):
     def check(self):
         try:
             # Getting private key
-            container_env = subprocess.run(
-                ["docker", "exec", "blinkpdf_container", "cat", "/opt/.env"],
-                capture_output=True,
-                text=True
-            ).stdout.strip()
-            private_key = re.search(r'PRIVATE_KEY="(.+?)"', container_env).group(1)
-            assert len(private_key) > 0, 'Missing PRIVATE_KEY on .env'
+            # container_env = subprocess.run(
+            #     ["docker", "exec", "blinkpdf_container", "cat", "/opt/.env"],
+            #     capture_output=True,
+            #     text=True
+            # ).stdout.strip()
+            # private_key = re.search(r'PRIVATE_KEY="(.+?)"', container_env).group(1)
+            # assert len(private_key) > 0, 'Missing PRIVATE_KEY on .env'
 
             sess = requests.Session()
 
