@@ -54,6 +54,7 @@ class DECDSA:
 
             if r1 == 0 or r2 == 0:
                 continue
+
             ks = pow(k1, -1, self.order) + pow(k2, -1, self.order)
             s = (pow(k1*k2, -1, self.order) * (z1 + r1 * self.private_key + z2 + r2 * self.private_key) * pow(ks, -1, self.order)) % self.order
 
@@ -82,7 +83,6 @@ class DECDSA:
         R_x = R.x() % self.order
         R_att_x = (self.lift_x(r1) + self.lift_x(r2)).x() % self.order
         return R_x == R_att_x
-    
     
     def long_to_bytes(self, x):
         return x.to_bytes(32, "big")
