@@ -10,8 +10,8 @@ def check():
     try:
         # Getting private key
         container_env = '''
-        SECRET_KEY="b03fd4a3a17cc9f37594e229c11646b1"
-        PRIVATE_KEY="c1e7e1c91affb96720c002d40398b96f8f355671af3ca0efdbb89589146b9296"
+        SECRET_KEY="97a44cbf7d2ff3bcbd8ef6fec02b3003"
+        PRIVATE_KEY="b6ca0ee4d229afd663656c031aa3cf5de485c7b88762b36039e11bcf655de848"
         '''.strip()
         private_key = re.search(r'PRIVATE_KEY="(.+?)"', container_env).group(1)
 
@@ -53,7 +53,7 @@ def check():
         r = sess.post(verify_url, files=filedata, timeout=5)
         assert 'The signature is <strong>invalid' in r.text, 'Verify function not working or algoritm verify process is changed for invalid signature'
 
-        host_flag = 'WreckIT50{LGRIW3bRQFHk3hIQaQs0INGpuDZSsXQtRC3amNBdOHzFVxkf2NDuvPswGxhYZXhB}'
+        host_flag = 'WreckIT50{jfrlJRuQkkJ4YBTcLMfQoqnznLQJ4Mt6Y91PlOmroFxukzrDCIFGqMAqlh4HZHUI}'
         
         # Checking C5: Login as admin and enc_flag checking
         url = 'http://54.179.25.137:11000/login'
@@ -63,8 +63,9 @@ def check():
         url = f'http://54.179.25.137:11000/admin_panel'
         r = sess.get(url, timeout=5)
         enc_flag = r.text.split('encrypted flag: ')[1].split('</p>')[0]
-        print(decryptMessage(enc_flag, private_key))
-        assert decryptMessage(enc_flag, private_key).decode() == host_flag, 'Change algorithm for encryption flag'
+        cek, dec = decryptMessage(enc_flag, private_key)
+        assert dec.decode() == host_flag, 'Change algorithm for encryption flag'
+        assert cek == True, 'Change signature algorithm for encryption flag'
 
         print('Check passed for blinkpdf')
         return True

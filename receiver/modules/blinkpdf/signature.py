@@ -38,5 +38,6 @@ def verify_signature(file, PRIVATE_KEY):
         pdf_data.seek(0)
         pdf_content = pdf_data.read()
         return decdsa.verify(pdf_content,signature)
-    except:
+    except Exception as e:
+        print(e)
         return False
