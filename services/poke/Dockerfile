@@ -22,8 +22,8 @@ RUN mkdir -p /run/sshd && chmod 755 /run/sshd
 # Copy source code and set permissions
 COPY src/ /var/www/html
 RUN mkdir /var/www/html/backups && \
-    chown -R www-data:www-data /var/www/html/backups && \
-    chmod -R 777 /var/www/html/backups
+    chown -R ctfuser:ctfuser /var/www/html && \
+    chmod -R 777 /var/www/html
 
 # Allow URL inclusion in PHP
 RUN echo "allow_url_include = On" >> /usr/local/etc/php/php.ini
