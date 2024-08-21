@@ -10,15 +10,15 @@ def check():
     try:
         # Getting private key
         container_env = '''
-SECRET_KEY="d7ce712dd3f3e058d1ec7f1adb1bdaf9"
-PRIVATE_KEY="a2f9e26df20d365cbd122aa69a5a0034d3bdee7e5bb7e631bdf49af659f10481"
+SECRET_KEY="a3a591c71b14fa8837dca5eb61ec8b14"
+PRIVATE_KEY="ceb4fd7181f056b048412a2bef7402991fdf3b8300f07e6617889cb7064cc529"
         '''.strip()
         private_key = re.search(r'PRIVATE_KEY="(.+?)"', container_env).group(1)
 
         sess = requests.Session()
 
         # Checking C1: Login as user
-        url = 'http://54.254.232.40:11000/login'
+        url = 'http://52.221.251.25:11000/login'
         data = {"username": "user", "password": "user"}
         r = sess.post(url, data=data, timeout=5)
         assert 'Welcome to the PDF Signature App'.lower() in r.text.lower(), 'Cannot login as user'
@@ -27,7 +27,7 @@ PRIVATE_KEY="a2f9e26df20d365cbd122aa69a5a0034d3bdee7e5bb7e631bdf49af659f10481"
         pdfbytes = open(pdfpath, 'rb').read()
 
         # Checking C2: Sign pdf as user
-        sign_url = 'http://54.254.232.40:11000/sign'
+        sign_url = 'http://52.221.251.25:11000/sign'
         r = sess.post(sign_url, timeout=5)
         sendata = ('main.pdf', pdfbytes, 'application/pdf')
         filedata = {'file': sendata}
@@ -40,27 +40,27 @@ PRIVATE_KEY="a2f9e26df20d365cbd122aa69a5a0034d3bdee7e5bb7e631bdf49af659f10481"
         # Checking C3: Verify valid pdf as user
         pdf_bytes_stream = io.BytesIO(pdfbytes)
         signed_pdf_stream = sign_pdf(pdf_bytes_stream, private_key)
-        verify_url = 'http://54.254.232.40:11000/verify'
+        verify_url = 'http://52.221.251.25:11000/verify'
         sendata = ('main_signed.pdf', signed_pdf_stream, 'application/pdf')
         filedata = {'file': sendata}
         r = sess.post(verify_url, files=filedata, timeout=5)
         assert 'The signature is <strong>valid</strong>.' in r.text, 'Verify function not working or algoritm verify process is changed'
         
         # Checking C3: Verify invalid pdf as user
-        verify_url = 'http://54.254.232.40:11000/verify'
+        verify_url = 'http://52.221.251.25:11000/verify'
         sendata = ('main_signed.pdf', pdfbytes, 'application/pdf')
         filedata = {'file': sendata}
         r = sess.post(verify_url, files=filedata, timeout=5)
         assert 'The signature is <strong>invalid' in r.text, 'Verify function not working or algoritm verify process is changed for invalid signature'
 
-        host_flag = 'WreckIT50{rroULlbyZWe28zPITO99txkmd6oknbhmRVeIKntcYYhx6OXIUqHjZ4uwaelRlMRQ}'
+        host_flag = 'WreckIT50{1D3rZiz8CrMuO2b2QGsQVQqvk8dLjDCBnmTHV6dGzQ0zZXOScP69b2LxKV2cj7Ut}'
         
         # Checking C5: Login as admin and enc_flag checking
-        url = 'http://54.254.232.40:11000/login'
+        url = 'http://52.221.251.25:11000/login'
         data = {'username': "admin", "password": f'{private_key}'}
         r = sess.post(url, data=data, timeout=5)
         assert 'Welcome to the PDF Signature App'.lower() in r.text.lower(), 'Cannot login as admin'
-        url = f'http://54.254.232.40:11000/admin_panel'
+        url = f'http://52.221.251.25:11000/admin_panel'
         r = sess.get(url, timeout=5)
         enc_flag = r.text.split('encrypted flag: ')[1].split('</p>')[0]
         cek, dec = decryptMessage(enc_flag, private_key)
