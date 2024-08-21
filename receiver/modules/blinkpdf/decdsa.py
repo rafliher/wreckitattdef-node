@@ -35,8 +35,8 @@ class DECDSA:
 
     def sign(self, message):
         m1, m2 = message[:len(message)//2], message[len(message)//2:]
-        h1 = hashlib.sha256(m1).digest()
-        h2 = hashlib.sha256(m2).digest()
+        h1 = hashlib.sha256(m1).digest()[1:]
+        h2 = hashlib.sha256(m2).digest()[1:]
         z1 = int.from_bytes(h1, byteorder='big') % self.order
         z2 = int.from_bytes(h2, byteorder='big') % self.order
         while True:
@@ -54,7 +54,7 @@ class DECDSA:
 
             if r1 == 0 or r2 == 0:
                 continue
-
+            
             ks = pow(k1, -1, self.order) + pow(k2, -1, self.order)
             s = (pow(k1*k2, -1, self.order) * (z1 + r1 * self.private_key + z2 + r2 * self.private_key) * pow(ks, -1, self.order)) % self.order
 
@@ -82,7 +82,6 @@ class DECDSA:
         R = u1 * self.generator + u3 * self.public_key + u2 * self.generator + u4 * self.public_key
         R_x = R.x() % self.order
         R_att_x = (self.lift_x(r1) + self.lift_x(r2)).x() % self.order
-        print(R_x == R_att_x)
         return R_x == R_att_x
     
     def long_to_bytes(self, x):

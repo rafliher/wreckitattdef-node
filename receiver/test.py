@@ -10,8 +10,8 @@ def check():
     try:
         # Getting private key
         container_env = '''
-        SECRET_KEY="97a44cbf7d2ff3bcbd8ef6fec02b3003"
-        PRIVATE_KEY="b6ca0ee4d229afd663656c031aa3cf5de485c7b88762b36039e11bcf655de848"
+        SECRET_KEY="61f17481bb40e221b955666240e7a12a"
+        PRIVATE_KEY="98388cb816ac994e5c19fd0168618f5e2e55ea2b526cf0c2bdce569235e92ead"
         '''.strip()
         private_key = re.search(r'PRIVATE_KEY="(.+?)"', container_env).group(1)
 
@@ -19,15 +19,18 @@ def check():
 
         # Checking C1: Login as user
         url = 'http://54.179.25.137:11000/login'
+        url = 'http://localhost:5111/login'
         data = {"username": "user", "password": "user"}
         r = sess.post(url, data=data, timeout=5)
         assert 'Welcome to the PDF Signature App'.lower() in r.text.lower(), 'Cannot login as user'
 
-        pdfpath = 'receiver/files/blinkpdf_hellodocs.pdf'
+        # pdfpath = 'receiver/files/blinkpdf_hellodocs.pdf'
+        pdfpath = 'receiver/files/test.pdf'
         pdfbytes = open(pdfpath, 'rb').read()
 
         # Checking C2: Sign pdf as user
-        sign_url = 'http://54.179.25.137:11000/sign'
+        # sign_url = 'http://54.179.25.137:11000/sign'
+        sign_url = 'http://localhost:5111/sign'
         r = sess.post(sign_url, timeout=5)
         sendata = ('main.pdf', pdfbytes, 'application/pdf')
         filedata = {'file': sendata}
