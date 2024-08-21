@@ -81,8 +81,6 @@ class DECDSA:
         R = u1 * self.generator + u3 * self.public_key + u2 * self.generator + u4 * self.public_key
         R_x = R.x() % self.order
         R_att_x = (self.lift_x(r1) + self.lift_x(r2)).x() % self.order
-        print(R_att_x)
-        print(R_x)
         return R_x == R_att_x
     
     
