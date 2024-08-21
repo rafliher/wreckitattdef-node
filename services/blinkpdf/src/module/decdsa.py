@@ -35,10 +35,10 @@ class DECDSA:
 
     def sign(self, message):
         m1, m2 = message[:len(message)//2], message[len(message)//2:]
-        h1 = hashlib.sha256(m1).hexdigest()[2:]
-        h2 = hashlib.sha256(m2).hexdigest()[2:]
-        z1 = int(h1, 16) % self.order
-        z2 = int(h2, 16) % self.order
+        h1 = hashlib.sha256(m1).digest()[1:]
+        h2 = hashlib.sha256(m2).digest()[1:]
+        z1 = int.from_bytes(h1, byteorder='big') % self.order
+        z2 = int.from_bytes(h2, byteorder='big') % self.order
         while True:
             k1 = random.randint(z1, z1*4)
             k2 = random.randint(z2, z2*4)
@@ -51,8 +51,6 @@ class DECDSA:
             # assert for checking valid points
             if(R_att_x!=(R1+R2).x() % self.order):
                 continue
-            
-            print(int(k1+k2).bit_length())
 
             if r1 == 0 or r2 == 0:
                 continue
@@ -72,8 +70,8 @@ class DECDSA:
             return False
         
         m1, m2 = message[:len(message)//2], message[len(message)//2:]
-        h1 = hashlib.sha256(m1).digest()
-        h2 = hashlib.sha256(m2).digest()
+        h1 = hashlib.sha256(m1).digest()[1:]
+        h2 = hashlib.sha256(m2).digest()[1:]
         z1 = int.from_bytes(h1, byteorder='big') % self.order
         z2 = int.from_bytes(h2, byteorder='big') % self.order
         s_inv = pow(s, -1, self.order)

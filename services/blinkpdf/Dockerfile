@@ -30,12 +30,12 @@ RUN touch /flag.txt
 
 COPY ./flag.txt /flag.txt
 
-COPY ./main.sh main.sh
+COPY ./main.sh ./main.sh
 
 RUN pip install -r requirements.txt
 RUN chmod +x ./main.sh
 
 CMD service ssh start && ./main.sh
 
-EXPOSE 5111
+# EXPOSE 5111
 # EXPOSE 22
