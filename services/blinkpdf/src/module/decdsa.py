@@ -35,13 +35,15 @@ class DECDSA:
 
     def sign(self, message):
         m1, m2 = message[:len(message)//2], message[len(message)//2:]
-        h1 = hashlib.sha256(m1).digest()[1:]
-        h2 = hashlib.sha256(m2).digest()[1:]
+        h1 = hashlib.sha256(m1).digest()[1:] # 248bit
+        h2 = hashlib.sha256(m2).digest()[1:] # 248bit
         z1 = int.from_bytes(h1, byteorder='big') % self.order
         z2 = int.from_bytes(h2, byteorder='big') % self.order
         while True:
-            k1 = random.randint(z1, z1*4)
-            k2 = random.randint(z2, z2*4)
+            k1 = random.randint(z1, z1*4) # 250bits
+            k2 = random.randint(z2, z2*4) # 250bits
+            # if 8 bits = 100%
+            # 3 just use 70 = 30-60%
             R1 = k1 * self.generator
             R2 = k2 * self.generator
             r1 = R1.x() % self.order
