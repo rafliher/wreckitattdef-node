@@ -13,5 +13,4 @@
 
 ````
 python3 starter.py
-```"# AttDef_CTF_Platform"
 ````
