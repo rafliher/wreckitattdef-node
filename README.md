@@ -12,6 +12,6 @@
 ## how-to-run
 
 ````
-python3 starter.py --username <username> --password <password> --challenge <challenge>
+python3 starter.py
 ```"# AttDef_CTF_Platform"
 ````
